@@ -34,7 +34,6 @@ public class BookRepositoryMySQL implements BookRepository{
             e.printStackTrace();
         }
 
-
         return books;
     }
 
@@ -66,10 +65,6 @@ public class BookRepositoryMySQL implements BookRepository{
 
 //        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
 
-
-
-
-
         try{
 //            Statement statement = connection.createStatement();
 //            statement.executeUpdate(newSql);
@@ -82,7 +77,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
             int rowsInserted = preparedStatement.executeUpdate();
 
-            return (rowsInserted != 1) ? false : true;
+            return rowsInserted == 1;
 
         } catch (SQLException e){
             e.printStackTrace();
