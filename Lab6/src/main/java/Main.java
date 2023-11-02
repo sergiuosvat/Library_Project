@@ -27,10 +27,7 @@ public class Main {
         bookRepository.removeAll();
         bookRepository.save(book);
 
-
-
         System.out.println(bookRepository.findById(2L));
-
 
     }
 }
