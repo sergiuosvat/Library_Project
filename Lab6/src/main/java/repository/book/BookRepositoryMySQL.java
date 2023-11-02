@@ -59,25 +59,27 @@ public class BookRepositoryMySQL implements BookRepository{
     // ALWAYS use PreparedStatement when USER INPUT DATA is present
     // DON'T CONCATENATE Strings
 
+
     @Override
     public boolean save(Book book) {
         String sql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+        book.setAuthor("', '', null); DROP TABLE book; -- ");
 
-//        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
+        String newSql = "INSERT INTO book VALUES(null, '" + book.getAuthor() + "', '" + book.getTitle()+ "', null );";
 
         try{
-//            Statement statement = connection.createStatement();
-//            statement.executeUpdate(newSql);
-//            return true;
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(newSql);
+            return true;
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, book.getAuthor());
-            preparedStatement.setString(2, book.getTitle());
-            preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
-
-            int rowsInserted = preparedStatement.executeUpdate();
-
-            return rowsInserted == 1;
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, book.getAuthor());
+//            preparedStatement.setString(2, book.getTitle());
+//            preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+//
+//            int rowsInserted = preparedStatement.executeUpdate();
+//
+//            return rowsInserted == 1;
 
         } catch (SQLException e){
             e.printStackTrace();

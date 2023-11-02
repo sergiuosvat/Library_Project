@@ -20,7 +20,7 @@ public class JDBConnectionWrapper {
     public JDBConnectionWrapper(String schema){
         try {
             Class.forName(JDBC_DRIVER);
-            connection = DriverManager.getConnection(DB_URL + schema, USER, PASSWORD);
+            connection = DriverManager.getConnection(DB_URL + schema + "?allowMultiQueries=true", USER, PASSWORD);
             //Bootstrap
             createTables();
 
