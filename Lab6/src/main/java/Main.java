@@ -19,14 +19,17 @@ public class Main {
         BookRepository bookRepository = new BookRepositoryMySQL(connectionWrapper.getConnection());
 
         Book book = new BookBuilder()
-                .setAuthor("', '', null); SLEEP(20); --")
+                .setAuthor("Cezar Petrecu")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
 
+        bookRepository.removeAll();
         bookRepository.save(book);
 
-        System.out.println(bookRepository.findAll());
+
+
+        System.out.println(bookRepository.findById(2L));
 
 
     }
