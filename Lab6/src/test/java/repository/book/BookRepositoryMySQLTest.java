@@ -24,6 +24,8 @@ class BookRepositoryMySQLTest {
     private static final String PASSWORD = "root";
     private static Connection connection;
 
+    BookRepository bookRepository = new BookRepositoryMySQL(connection);
+
     @BeforeAll
     public static void setUp(){
         try {
@@ -52,7 +54,7 @@ class BookRepositoryMySQLTest {
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
 
-        BookRepository bookRepository = new BookRepositoryMySQL(connection);
+
         bookRepository.save(book);
 
         Optional<Book> savedBook = bookRepository.findById(1L);
@@ -61,21 +63,18 @@ class BookRepositoryMySQLTest {
 
     @Test
     void findAll() {
-        BookRepository bookRepository = new BookRepositoryMySQL(connection);
         List<Book> books = bookRepository.findAll();
         assertNotNull(books);
     }
 
     @Test
     void findById() {
-        BookRepository bookRepository = new BookRepositoryMySQL(connection);
         Optional<Book> book = bookRepository.findById(1L);
         assertTrue(book.isPresent());
     }
 
     @Test
     void removeAll() {
-        BookRepository bookRepository = new BookRepositoryMySQL(connection);
         bookRepository.removeAll();
         List<Book> books = bookRepository.findAll();
         assertTrue(books.isEmpty());

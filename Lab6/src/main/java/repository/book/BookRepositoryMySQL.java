@@ -101,7 +101,7 @@ public class BookRepositoryMySQL implements BookRepository{
     }
 
     @Override
-    public void removeAll() {
+    public boolean removeAll() {
         String sql = "TRUNCATE TABLE book";
         try{
             Statement statement = connection.createStatement();
@@ -109,6 +109,7 @@ public class BookRepositoryMySQL implements BookRepository{
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return true;
     }
 
 
