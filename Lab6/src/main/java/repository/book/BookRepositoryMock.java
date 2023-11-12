@@ -32,7 +32,7 @@ public class BookRepositoryMock implements BookRepository{
     }
 
     @Override
-    public boolean removeAll() {
-        books.clear(); return true;
+    public void removeAll() {
+        books.clear();
     }
 }
