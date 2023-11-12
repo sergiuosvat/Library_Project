@@ -22,14 +22,16 @@ public class Main {
         BookService bookService = new BookServiceImpl(bookRepository);
 
         Book book = new BookBuilder()
-                .setAuthor("', '', null); SLEEP(20); --")
+                .setAuthor("Cezar Petrecu")
                 .setTitle("Fram Ursul Polar")
                 .setPublishedDate(LocalDate.of(2010, 6, 2))
                 .build();
 
+
         bookService.save(book);
 
         System.out.println(bookService.findAll());
+
 
 
 
