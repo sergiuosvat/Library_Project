@@ -1,15 +1,15 @@
-package service;
+package service.book;
 
 import model.Book;
 import repository.book.BookRepository;
-import repository.book.BookRepositoryMySQL;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class BookServiceImpl implements BookService{
-    private final BookRepository bookRepository;
+
+    final BookRepository bookRepository;
 
     public BookServiceImpl(BookRepository bookRepository){
         this.bookRepository = bookRepository;
@@ -22,8 +22,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book findById(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book with id: %d not found".formatted(id)));
+        return bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Book with id: %d not found".formatted(id)));
     }
 
     @Override
@@ -37,6 +36,6 @@ public class BookServiceImpl implements BookService{
 
         LocalDate now = LocalDate.now();
 
-        return (int) ChronoUnit.YEARS.between(book.getPublishedDate(), now);
+        return (int)ChronoUnit.YEARS.between(book.getPublishedDate(), now);
     }
 }

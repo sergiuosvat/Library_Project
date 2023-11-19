@@ -12,19 +12,29 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
         super(bookRepository);
         this.cache = cache;
     }
+
     @Override
     public List<Book> findAll() {
-        if(cache.hasResult()){
-            return cache.load();
+        if (cache.hasResult()){
+           return cache.load();
         }
 
         List<Book> books = decoratedRepository.findAll();
         cache.save(books);
+
         return books;
     }
 
     @Override
     public Optional<Book> findById(Long id) {
+
+        if (cache.hasResult()){
+            return cache.load()
+                    .stream()
+                    .filter(it -> it.getId().equals(id))
+                    .findFirst();
+        }
+
         return decoratedRepository.findById(id);
     }
 
