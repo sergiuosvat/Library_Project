@@ -1,6 +1,7 @@
 package repository.user;
 import model.User;
 import model.builder.UserBuilder;
+import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 
 import java.sql.Connection;
@@ -30,50 +31,74 @@ public class UserRepositoryMySQL implements UserRepository {
     }
 
     @Override
-    public User findByUsernameAndPassword(String username, String password) {
+    public Notification<User> findByUsernameAndPassword(String username, String password) {
+
+        Notification<User> findByUsernameAndPasswordNotification = new Notification<>();
+
         try {
-            Statement statement = connection.createStatement();
 
             String fetchUserSql =
-                    "Select * from `" + USER + "` where `username`=\'" + username + "\' and `password`=\'" + password + "\'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
-            userResultSet.next();
+                    "Select * from " + USER + " where username = ? " + " and password = ? ";
 
-            User user = new UserBuilder()
-                    .setUsername(userResultSet.getString("username"))
-                    .setPassword(userResultSet.getString("password"))
-                    .setRoles(rightsRolesRepository.findRolesForUser(userResultSet.getLong("id")))
-                    .build();
+            PreparedStatement preparedStatement = connection.prepareStatement(fetchUserSql);
+            preparedStatement.setString(1,username);
+            preparedStatement.setString(2,password);
+            ResultSet userResultSet = preparedStatement.executeQuery();
+            if(userResultSet.next()){
+                User user = new UserBuilder()
+                        .setUsername(userResultSet.getString("username"))
+                        .setPassword(userResultSet.getString("password"))
+                        .setRoles(rightsRolesRepository.findRolesForUser(userResultSet.getLong("id")))
+                        .build();
+                findByUsernameAndPasswordNotification.setResult(user);
+            } else {
+                findByUsernameAndPasswordNotification.addError("Invalid username or password!");
+                return findByUsernameAndPasswordNotification;
+            }
 
-            return user;
+
         } catch (SQLException e) {
             System.out.println(e.toString());
+            findByUsernameAndPasswordNotification.addError("Something is wrong with the Database!");
         }
-        return null;
+        return findByUsernameAndPasswordNotification;
     }
 
     @Override
-    public boolean save(User user) {
+    public Notification<Boolean> save(User user) {
+
+        Notification<Boolean> saveNotification = new Notification<>();
         try {
             PreparedStatement insertUserStatement = connection
                     .prepareStatement("INSERT INTO user values (null, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             insertUserStatement.setString(1, user.getUsername());
             insertUserStatement.setString(2, user.getPassword());
-            insertUserStatement.executeUpdate();
 
-            ResultSet rs = insertUserStatement.getGeneratedKeys();
-            rs.next();
-            long userId = rs.getLong(1);
-            user.setId(userId);
+            if(existsByUsername(user.getUsername()))
+            {
+                saveNotification.addError("Email already exists in the database!");
+                saveNotification.setResult(Boolean.FALSE);
+            }else{
+                insertUserStatement.executeUpdate();
 
-            rightsRolesRepository.addRolesToUser(user, user.getRoles());
+                ResultSet rs = insertUserStatement.getGeneratedKeys();
+                rs.next();
+                long userId = rs.getLong(1);
+                if(userId == 0)
+                {
+                    saveNotification.addError("Eroare la obtinerea id-ului");
+                    saveNotification.setResult(Boolean.FALSE);
+                }
+                user.setId(userId);
+                rightsRolesRepository.addRolesToUser(user, user.getRoles());
+                saveNotification.setResult(Boolean.TRUE);
+            }
 
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            saveNotification.addError("Something is wrong with the database!");
         }
-
+        return saveNotification;
     }
 
     @Override
@@ -90,11 +115,13 @@ public class UserRepositoryMySQL implements UserRepository {
     @Override
     public boolean existsByUsername(String email) {
         try {
-            Statement statement = connection.createStatement();
 
             String fetchUserSql =
-                    "Select * from `" + USER + "` where `username`=\'" + email + "\'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
+                    "Select * from " + USER + " where username = ? ";
+            PreparedStatement preparedStatement = connection.prepareStatement(fetchUserSql);
+            preparedStatement.setString(1,email);
+
+            ResultSet userResultSet = preparedStatement.executeQuery();
             return userResultSet.next();
 
         } catch (SQLException e) {

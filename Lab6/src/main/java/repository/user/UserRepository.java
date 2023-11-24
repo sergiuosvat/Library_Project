@@ -1,6 +1,8 @@
 package repository.user;
 
+import model.Book;
 import model.User;
+import model.validator.Notification;
 
 import java.util.*;
 
@@ -8,9 +10,9 @@ public interface UserRepository {
 
     List<User> findAll();
 
-    User findByUsernameAndPassword(String username, String password);
+    Notification<User> findByUsernameAndPassword(String username, String password);
 
-    boolean save(User user);
+    Notification<Boolean> save(User user);
 
     void removeAll();
 
