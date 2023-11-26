@@ -4,7 +4,6 @@ import controller.LoginController;
 import database.DatabaseConnectionFactory;
 import javafx.stage.Stage;
 import repository.book.BookRepository;
-import repository.book.BookRepositoryMock;
 import repository.book.BookRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
@@ -43,9 +42,9 @@ public class ComponentFactory {
         this.userRepository = new UserRepositoryMySQL(connection,rightsRolesRepository);
         this.authenticationService = new AuthenticationServiceImpl(userRepository,rightsRolesRepository);
         this.loginView = new LoginView(stage);
-        this.loginController = new LoginController(loginView,authenticationService);
         this.bookRepository = new BookRepositoryMySQL(connection);
         this.bookService = new BookServiceImpl(bookRepository);
+        this.loginController = new LoginController(loginView,authenticationService,getBookService());
     }
 
     public LoginView getLoginView() {

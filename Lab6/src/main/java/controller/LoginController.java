@@ -2,23 +2,24 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import model.Role;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
+import service.book.BookService;
 import service.user.AuthenticationService;
+import view.CustomerView;
 import view.LoginView;
-
-import java.util.EventListener;
-import java.util.List;
 
 public class LoginController {
 
     private final LoginView loginView;
     private final AuthenticationService authenticationService;
+    private final BookService bookService;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService) {
+    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService) {
         this.loginView = loginView;
+        this.bookService = bookService;
         this.authenticationService = authenticationService;
 
         this.loginView.addLoginButtonListener(new LoginButtonListener());
@@ -33,11 +34,24 @@ public class LoginController {
             String password = loginView.getPassword();
 
             Notification<User> loginNotification = authenticationService.login(username, password);
+            Role role = loginNotification.getResult().getRoles().get(0);
 
             if (loginNotification.hasErrors()){
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
-                loginView.setActionTargetText("LogIn Successfull!");
+                switch (role.getRole()) {
+                    case "administrator":
+                        System.out.println("Not working");
+                        break;
+                    case "customer":
+                        new CustomerView(loginView.getStage(),bookService);
+                        break;
+                    case "employee":
+                        System.out.println("Not working employee");
+                        break;
+                    default:
+                        break;
+                }
             }
 
         }

@@ -80,7 +80,7 @@ public class Bootstrap {
         System.out.println("Done table bootstrap");
     }
 
-    private static void bootstrapUserData() throws SQLException {
+    private static void bootstrapUserData() {
         for (String schema : SCHEMAS) {
             System.out.println("Bootstrapping user data for " + schema);
 
@@ -94,19 +94,19 @@ public class Bootstrap {
         }
     }
 
-    private static void bootstrapRoles() throws SQLException {
+    private static void bootstrapRoles() {
         for (String role : ROLES) {
             rightsRolesRepository.addRole(role);
         }
     }
 
-    private static void bootstrapRights() throws SQLException {
+    private static void bootstrapRights() {
         for (String right : RIGHTS) {
             rightsRolesRepository.addRight(right);
         }
     }
 
-    private static void bootstrapRoleRight() throws SQLException {
+    private static void bootstrapRoleRight() {
         Map<String, List<String>> rolesRights = getRolesRights();
 
         for (String role : rolesRights.keySet()) {
@@ -120,7 +120,7 @@ public class Bootstrap {
         }
     }
 
-    private static void bootstrapUserRoles() throws SQLException {
+    private static void bootstrapUserRoles() {
 
     }
 }

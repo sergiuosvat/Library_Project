@@ -5,6 +5,8 @@ package model;
 // POJO - Plain Old Java Object
 
 
+import javafx.beans.value.ObservableValue;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -55,4 +57,5 @@ public class Book{
     public String toString(){
         return String.format("Id: %d | Title: %s | Author: %s | Date: %s", this.id, this.title, this.author, this.publishedDate);
     }
+
 }
