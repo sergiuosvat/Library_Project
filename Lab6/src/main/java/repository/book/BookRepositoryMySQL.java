@@ -101,7 +101,6 @@ public class BookRepositoryMySQL implements BookRepository{
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
@@ -111,6 +110,17 @@ public class BookRepositoryMySQL implements BookRepository{
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void removeById(Long id){
+        String sql = "DELETE FROM book WHERE id = ?;";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1,id);
+            preparedStatement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
         }

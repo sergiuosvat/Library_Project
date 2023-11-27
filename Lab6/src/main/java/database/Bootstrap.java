@@ -27,6 +27,8 @@ public class Bootstrap {
         bootstrapTables();
 
         bootstrapUserData();
+
+        populateTables();
     }
 
     private static void dropAll() throws SQLException {
@@ -44,7 +46,7 @@ public class Bootstrap {
                     "TRUNCATE `user_role`;",
                     "DROP TABLE `user_role`;",
                     "TRUNCATE `role`;",
-                    "DROP TABLE  `book`, `role`, `user`;"
+                    "DROP TABLE  `book`, `role`, `user`, `orders`;"
             };
 
             Arrays.stream(dropStatements).forEach(dropStatement -> {
@@ -76,7 +78,6 @@ public class Bootstrap {
                 statement.execute(createTableSQL);
             }
         }
-
         System.out.println("Done table bootstrap");
     }
 
@@ -122,5 +123,16 @@ public class Bootstrap {
 
     private static void bootstrapUserRoles() {
 
+    }
+
+    private static void populateTables() throws SQLException {
+        SQLTablePopulationFactory sqlTablePopulationFactory = new SQLTablePopulationFactory();
+
+        String populateTableSQL = sqlTablePopulationFactory.getPopulateSQLForTable("book");
+        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("library");
+        Connection connection = connectionWrapper.getConnection();
+
+        Statement statement = connection.createStatement();
+        statement.execute(populateTableSQL);
     }
 }
