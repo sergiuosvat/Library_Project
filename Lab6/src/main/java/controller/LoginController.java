@@ -6,6 +6,7 @@ import model.Role;
 import model.User;
 import model.validator.Notification;
 import service.book.BookService;
+import service.order.OrderService;
 import service.user.AuthenticationService;
 import view.CustomerView;
 import view.LoginView;
@@ -15,12 +16,14 @@ public class LoginController {
     private final LoginView loginView;
     private final AuthenticationService authenticationService;
     private final BookService bookService;
+    private final OrderService orderService;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService) {
+    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService, OrderService orderService) {
         this.loginView = loginView;
         this.bookService = bookService;
         this.authenticationService = authenticationService;
+        this.orderService = orderService;
 
         this.loginView.addLoginButtonListener(new LoginButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
@@ -34,17 +37,18 @@ public class LoginController {
             String password = loginView.getPassword();
 
             Notification<User> loginNotification = authenticationService.login(username, password);
-            Role role = loginNotification.getResult().getRoles().get(0);
-
             if (loginNotification.hasErrors()){
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
+                Role role = loginNotification.getResult().getRoles().get(0);
                 switch (role.getRole()) {
                     case "administrator":
                         System.out.println("Not working");
                         break;
                     case "customer":
-                        new CustomerView(loginView.getStage(),bookService);
+                        CustomerView customerView = new CustomerView(loginView.getStage(),bookService);
+                        // get id from the db
+                        new CustomerController(customerView, loginNotification.getResult().getId(), orderService, bookService);
                         break;
                     case "employee":
                         System.out.println("Not working employee");

@@ -5,10 +5,7 @@ package model;
 // POJO - Plain Old Java Object
 
 
-import javafx.beans.value.ObservableValue;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Book{
 
@@ -19,6 +16,8 @@ public class Book{
     private String title;
 
     private LocalDate publishedDate;
+
+    private int stock;
 
 
     public Long getId() {
@@ -51,6 +50,14 @@ public class Book{
 
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     @Override

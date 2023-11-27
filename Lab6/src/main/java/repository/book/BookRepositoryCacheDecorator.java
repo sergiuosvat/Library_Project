@@ -49,4 +49,17 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
         cache.invalidateCache();
         decoratedRepository.removeAll();
     }
+
+    @Override
+    public void removeById(Long id) {
+    }
+
+    @Override
+    public void updateStock(int quantity, Long id) {
+    }
+
+    @Override
+    public boolean checkStock(int quantity, Long id) {
+        return false;
+    }
 }
