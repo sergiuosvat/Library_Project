@@ -43,7 +43,14 @@ public class CustomerController {
                 bookService.removeById(book.getId());
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartile au fost adaugate cu succes!");
+            refreshTableView();
             alert.show();
+        }
+        private void refreshTableView()
+        {
+            customerView.getTable().getItems().clear();
+            List<Book> updatedBooks = bookService.findAll();
+            customerView.getTable().getItems().addAll(updatedBooks);
         }
     }
 
