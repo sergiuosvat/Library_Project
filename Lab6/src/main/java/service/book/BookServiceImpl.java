@@ -43,4 +43,13 @@ public class BookServiceImpl implements BookService{
     {
         bookRepository.removeById(id);
     }
+
+    @Override
+    public void updateStock(int quantity, Long id) {
+        bookRepository.updateStock(quantity,id);
+    }
+
+    public boolean checkStock(int quantity, Long id) {
+        return bookRepository.checkStock(quantity, id);
+    }
 }

@@ -31,19 +31,29 @@ public class CustomerController {
         @Override
         public void handle(javafx.event.ActionEvent event) {
             List<Book> cart = customerView.getTable().getSelectionModel().getSelectedItems();
+            int quantity = Integer.parseInt(customerView.getTextField().getText());
             for(Book book : cart)
             {
+                if(!bookService.checkStock(quantity, book.getId()))
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR,
+                            String.format("Cartea cu numele %s nu este in cantitatea dorita",book.getTitle()));
+                    alert.show();
+                    return;
+                }
                 Order order = new OrderBuilder().
                         setAuthor(book.getAuthor())
                         .setTitle(book.getTitle())
                         .setPublishedDate(book.getPublishedDate())
                         .setUserId(user_id)
+                        .setQuantity(quantity)
                         .build();
                 orderService.save(order);
-                bookService.removeById(book.getId());
+                bookService.updateStock(quantity,book.getId());
             }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartile au fost adaugate cu succes!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartea a fost adaugata cu succes!");
             refreshTableView();
+            customerView.getTextField().clear();
             alert.show();
         }
         private void refreshTableView()

@@ -15,4 +15,8 @@ public interface BookRepository {
     void removeAll();
 
     void removeById(Long id);
+
+    void updateStock(int quantity, Long id);
+
+    boolean checkStock(int quantity, Long id);
 }

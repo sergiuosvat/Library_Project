@@ -115,6 +115,24 @@ public class BookRepositoryMySQL implements BookRepository{
         }
     }
 
+    public void updateStock(int quantity, Long id){
+        int oldStock = findById(id).get().getStock();
+        int newStock = oldStock - quantity;
+        if(newStock <= 0)
+            removeById(id);
+        else {
+            String sql = "UPDATE book SET stock = ? WHERE id = ?;";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, newStock);
+                preparedStatement.setLong(2, id);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public void removeById(Long id){
         String sql = "DELETE FROM book WHERE id = ?;";
         try{
@@ -132,6 +150,13 @@ public class BookRepositoryMySQL implements BookRepository{
                 .setTitle(resultSet.getString("title"))
                 .setAuthor(resultSet.getString("author"))
                 .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
+                .setStock(resultSet.getInt("stock"))
                 .build();
+    }
+
+    public boolean checkStock(int quantity, Long id)
+    {
+        int currStock = findById(id).get().getStock();
+        return quantity <= currStock;
     }
 }

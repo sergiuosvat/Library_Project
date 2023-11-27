@@ -34,6 +34,11 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder setStock(int stock){
+        book.setStock(stock);
+        return this;
+    }
+
     public Book build()
     {
         return book;

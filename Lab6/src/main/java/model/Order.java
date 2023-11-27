@@ -9,6 +9,7 @@ public class Order {
     private LocalDate publishedDate;
     private Long user_id;
 
+    private int quantity;
     public String getAuthor() {
         return author;
     }
@@ -47,5 +48,13 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

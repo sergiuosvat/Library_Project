@@ -38,5 +38,10 @@ public class OrderBuilder {
         return this;
     }
 
+    public OrderBuilder setQuantity(int quantity)
+    {
+        order.setQuantity(quantity);
+        return this;
+    }
     public Order build(){return order;}
 }

@@ -16,7 +16,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
 
     public boolean save(Order order) {
-        String sql = "INSERT INTO orders VALUES(null, ?, ?, ?, ?);";
+        String sql = "INSERT INTO orders VALUES(null, ?, ?, ?, ?, ?);";
 
         try{
 
@@ -25,6 +25,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
             preparedStatement.setString(2, order.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(order.getPublishedDate()));
             preparedStatement.setLong(4,order.getUser_id());
+            preparedStatement.setInt(5,order.getQuantity());
 
             int rowsInserted = preparedStatement.executeUpdate();
 

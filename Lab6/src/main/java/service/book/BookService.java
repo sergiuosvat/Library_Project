@@ -15,4 +15,8 @@ public interface BookService {
     int getAgeOfBook(Long id);
 
     void removeById(Long id);
+
+    void updateStock(int quantity, Long id);
+
+    boolean checkStock(int quantity, Long id);
 }
