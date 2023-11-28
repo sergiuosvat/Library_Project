@@ -43,5 +43,11 @@ public class OrderBuilder {
         order.setQuantity(quantity);
         return this;
     }
+
+    public OrderBuilder setEmployeeId(Long employeeId)
+    {
+        order.setEmployee_id(employeeId);
+        return this;
+    }
     public Order build(){return order;}
 }

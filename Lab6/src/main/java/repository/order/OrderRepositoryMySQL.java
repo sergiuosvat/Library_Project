@@ -16,18 +16,32 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
 
     public boolean save(Order order) {
-        String sql = "INSERT INTO orders VALUES(null, ?, ?, ?, ?, ?);";
-
+        int rowsInserted;
         try{
+            if(order.hasEmployeeId())
+            {
+                String sql = "INSERT INTO orders VALUES(null, ?, ?, ?, ?, ?, ?);";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, order.getAuthor());
-            preparedStatement.setString(2, order.getTitle());
-            preparedStatement.setDate(3, java.sql.Date.valueOf(order.getPublishedDate()));
-            preparedStatement.setLong(4,order.getUser_id());
-            preparedStatement.setInt(5,order.getQuantity());
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, order.getAuthor());
+                preparedStatement.setString(2, order.getTitle());
+                preparedStatement.setDate(3, java.sql.Date.valueOf(order.getPublishedDate()));
+                preparedStatement.setLong(4,order.getUser_id());
+                preparedStatement.setInt(5,order.getQuantity());
 
-            int rowsInserted = preparedStatement.executeUpdate();
+                rowsInserted = preparedStatement.executeUpdate();
+            }else{
+                String sql = "INSERT INTO orders VALUES(null, ?, ?, ?, ?, ?, 0);";
+
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, order.getAuthor());
+                preparedStatement.setString(2, order.getTitle());
+                preparedStatement.setDate(3, java.sql.Date.valueOf(order.getPublishedDate()));
+                preparedStatement.setLong(4,order.getUser_id());
+                preparedStatement.setInt(5,order.getQuantity());
+
+                rowsInserted = preparedStatement.executeUpdate();
+            }
 
             return rowsInserted == 1;
 

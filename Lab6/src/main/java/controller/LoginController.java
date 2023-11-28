@@ -9,7 +9,10 @@ import service.book.BookService;
 import service.order.OrderService;
 import service.user.AuthenticationService;
 import view.CustomerView;
+import view.EmployeeView;
 import view.LoginView;
+
+import static database.Constants.Roles.*;
 
 public class LoginController {
 
@@ -37,26 +40,26 @@ public class LoginController {
             String password = loginView.getPassword();
 
             Notification<User> loginNotification = authenticationService.login(username, password);
-            if (loginNotification.hasErrors()){
+            if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
-            }else{
+            } else {
                 Role role = loginNotification.getResult().getRoles().get(0);
                 switch (role.getRole()) {
-                    case "administrator":
-                        System.out.println("Not working");
+                    case ADMINISTRATOR:
+                        System.out.println("Not working admin");
                         break;
-                    case "customer":
-                        CustomerView customerView = new CustomerView(loginView.getStage(),bookService);
+                    case CUSTOMER:
+                        CustomerView customerView = new CustomerView(loginView.getStage(), bookService);
                         new CustomerController(customerView, loginNotification.getResult().getId(), orderService, bookService);
                         break;
-                    case "employee":
-                        System.out.println("Not working employee");
+                    case EMPLOYEE:
+                        EmployeeView employeeView = new EmployeeView(loginView.getStage(), bookService);
+                        new EmployeeController(employeeView,loginNotification.getResult().getId(), orderService, bookService);
                         break;
                     default:
                         break;
                 }
             }
-
         }
     }
 
@@ -67,11 +70,11 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            Notification<Boolean> registerNotification = authenticationService.register(username,password);
+            Notification<Boolean> registerNotification = authenticationService.register(username, password);
 
             if (registerNotification.hasErrors()) {
                 loginView.setActionTargetText(registerNotification.getFormattedErrors());
-            }else {
+            } else {
                 loginView.setActionTargetText("Register successful!");
             }
         }

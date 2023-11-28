@@ -1,6 +1,7 @@
 package launcher;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -11,6 +12,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.getIcons().add(new Image("utcn-logo.png"));
         ComponentFactory componentFactory = ComponentFactory.getInstance(false,primaryStage);
     }
 }

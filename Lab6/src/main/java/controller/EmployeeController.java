@@ -8,30 +8,29 @@ import model.Order;
 import model.builder.OrderBuilder;
 import service.book.BookService;
 import service.order.OrderService;
-import view.CustomerView;
+import view.EmployeeView;
 
 import java.util.List;
 
-public class CustomerController {
-    private final CustomerView customerView;
-    private final Long userId;
+public class EmployeeController {
+    private final EmployeeView employeeView;
     private final OrderService orderService;
     private final BookService bookService;
+    private final Long employeeId;
 
-    public CustomerController(CustomerView customerView, Long userId, OrderService orderService, BookService bookService){
-        this.customerView = customerView;
-        this.customerView.addBuyButtonListener(new BuyButtonListener());
-        this.userId = userId;
+    public EmployeeController(EmployeeView employeeView,Long employeeId, OrderService orderService, BookService bookService){
+        this.employeeView = employeeView;
+        this.employeeId = employeeId;
+        this.employeeView.addSellButtonListener(new EmployeeController.SellButtonListener());
         this.orderService = orderService;
         this.bookService = bookService;
     }
-
-    private class BuyButtonListener implements EventHandler<ActionEvent>
+    private class SellButtonListener implements EventHandler<ActionEvent>
     {
         @Override
         public void handle(javafx.event.ActionEvent event) {
-            List<Book> cart = customerView.getTable().getSelectionModel().getSelectedItems();
-            int quantity = Integer.parseInt(customerView.getTextField().getText());
+            List<Book> cart = employeeView.getTable().getSelectionModel().getSelectedItems();
+            int quantity = Integer.parseInt(employeeView.getTextFieldQuantity().getText());
             for(Book book : cart)
             {
                 if(!bookService.checkStock(quantity, book.getId()))
@@ -41,26 +40,33 @@ public class CustomerController {
                     alert.show();
                     return;
                 }
+                if(employeeView.getTextFieldUserId().getText().isEmpty())
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR,"Nu ati introdus id-ul user-ului care cumpara cartea");
+                    alert.show();
+                    return;
+                }
                 Order order = new OrderBuilder().
                         setAuthor(book.getAuthor())
                         .setTitle(book.getTitle())
                         .setPublishedDate(book.getPublishedDate())
-                        .setUserId(userId)
+                        .setUserId(Long.parseLong(employeeView.getTextFieldUserId().getText()))
                         .setQuantity(quantity)
+                        .setEmployeeId(employeeId)
                         .build();
                 orderService.save(order);
                 bookService.updateStock(quantity,book.getId());
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartea a fost adaugata cu succes!");
             refreshTableView();
-            customerView.getTextField().clear();
+            employeeView.getTextFieldQuantity().clear();
             alert.show();
         }
         private void refreshTableView()
         {
-            customerView.getTable().getItems().clear();
+            employeeView.getTable().getItems().clear();
             List<Book> updatedBooks = bookService.findAll();
-            customerView.getTable().getItems().addAll(updatedBooks);
+            employeeView.getTable().getItems().addAll(updatedBooks);
         }
     }
 

@@ -8,6 +8,7 @@ public class Order {
     private String title;
     private LocalDate publishedDate;
     private Long user_id;
+    private Long employee_id = 0L;
 
     private int quantity;
     public String getAuthor() {
@@ -56,5 +57,18 @@ public class Order {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getEmployee_id() {
+        return employee_id;
+    }
+
+    public void setEmployee_id(Long employee_id) {
+        this.employee_id = employee_id;
+    }
+
+    public boolean hasEmployeeId()
+    {
+        return getEmployee_id()!=0;
     }
 }
