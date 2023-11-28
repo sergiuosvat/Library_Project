@@ -29,7 +29,7 @@ public class Constants {
 
         rolesRights.get(EMPLOYEE).addAll(Arrays.asList(CREATE_BOOK, DELETE_BOOK, UPDATE_BOOK, SELL_BOOK));
 
-        rolesRights.get(CUSTOMER).addAll(Arrays.asList(SELL_BOOK, BUY_BOOK, RETURN_BOOK));
+        rolesRights.get(CUSTOMER).addAll(Arrays.asList(BUY_BOOK, RETURN_BOOK));
 
         return rolesRights;
     }

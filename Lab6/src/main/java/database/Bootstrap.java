@@ -1,17 +1,25 @@
 package database;
 
+import model.Role;
+import model.User;
+import model.builder.UserBuilder;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static database.Constants.Rights.RIGHTS;
-import static database.Constants.Roles.ROLES;
+import static database.Constants.Roles.*;
 import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 
@@ -27,8 +35,6 @@ public class Bootstrap {
         bootstrapTables();
 
         bootstrapUserData();
-
-        populateTables();
     }
 
     private static void dropAll() throws SQLException {
@@ -39,14 +45,14 @@ public class Bootstrap {
             Statement statement = connection.createStatement();
 
             String[] dropStatements = {
-                    "TRUNCATE `role_right`;",
-                    "DROP TABLE `role_right`;",
-                    "TRUNCATE `right`;",
-                    "DROP TABLE `right`;",
-                    "TRUNCATE `user_role`;",
-                    "DROP TABLE `user_role`;",
-                    "TRUNCATE `role`;",
-                    "DROP TABLE  `book`, `role`, `user`, `orders`;"
+                    "TRUNCATE `" + schema + "`.`role_right`;",
+                    "DROP TABLE `" + schema + "`.`role_right`;",
+                    "TRUNCATE `" + schema + "`.`right`;",
+                    "DROP TABLE `" + schema + "`.`right`;",
+                    "TRUNCATE `" + schema + "`.`user_role`;",
+                    "DROP TABLE `" + schema + "`.`user_role`;",
+                    "TRUNCATE `" + schema + "`.`role`;",
+                    "DROP TABLE `" + schema + "`.`book`, `" + schema + "`.`role`, `" + schema + "`.`user`, `" + schema + "`.`orders`;"
             };
 
             Arrays.stream(dropStatements).forEach(dropStatement -> {
@@ -81,7 +87,7 @@ public class Bootstrap {
         System.out.println("Done table bootstrap");
     }
 
-    private static void bootstrapUserData() {
+    private static void bootstrapUserData() throws SQLException {
         for (String schema : SCHEMAS) {
             System.out.println("Bootstrapping user data for " + schema);
 
@@ -91,8 +97,10 @@ public class Bootstrap {
             bootstrapRoles();
             bootstrapRights();
             bootstrapRoleRight();
-            bootstrapUserRoles();
+            populateTables(connectionWrapper.getConnection());
+            bootstrapUserRoles(connectionWrapper.getConnection());
         }
+
     }
 
     private static void bootstrapRoles() {
@@ -121,16 +129,38 @@ public class Bootstrap {
         }
     }
 
-    private static void bootstrapUserRoles() {
+    private static void bootstrapUserRoles(Connection connection) {
+        UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
+        AuthenticationService authenticationService = new AuthenticationServiceImpl(userRepository, rightsRolesRepository);
+        Role adminRole = rightsRolesRepository.findRoleByTitle(ADMINISTRATOR);
+        User user = new UserBuilder()
+                .setUsername("root@root.com")
+                .setPassword(authenticationService.hashPassword("root123!"))
+                .setRoles(Collections.singletonList(adminRole))
+                .build();
+        userRepository.save(user);
 
+        Role employeeRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
+        User user1 = new UserBuilder()
+                .setUsername("emp@emp.com")
+                .setPassword(authenticationService.hashPassword("root123!"))
+                .setRoles(Collections.singletonList(employeeRole))
+                .build();
+        userRepository.save(user1);
+
+        Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER);
+        User user2 = new UserBuilder()
+                .setUsername("cust@cust.com")
+                .setPassword(authenticationService.hashPassword("root123!"))
+                .setRoles(Collections.singletonList(customerRole))
+                .build();
+        userRepository.save(user2);
     }
 
-    private static void populateTables() throws SQLException {
+    private static void populateTables(Connection connection) throws SQLException {
         SQLTablePopulationFactory sqlTablePopulationFactory = new SQLTablePopulationFactory();
 
         String populateTableSQL = sqlTablePopulationFactory.getPopulateSQLForTable("book");
-        JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper("library");
-        Connection connection = connectionWrapper.getConnection();
 
         Statement statement = connection.createStatement();
         statement.execute(populateTableSQL);

@@ -47,7 +47,6 @@ public class LoginController {
                         break;
                     case "customer":
                         CustomerView customerView = new CustomerView(loginView.getStage(),bookService);
-                        // get id from the db
                         new CustomerController(customerView, loginNotification.getResult().getId(), orderService, bookService);
                         break;
                     case "employee":

@@ -9,4 +9,6 @@ public interface AuthenticationService {
     Notification<User> login(String username, String password);
 
     boolean logout(User user);
+
+    String hashPassword(String password);
 }
