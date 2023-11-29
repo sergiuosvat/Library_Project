@@ -89,6 +89,7 @@ public class EmployeeController {
         employeeView.getTextFieldPublishedDate().clear();
         employeeView.getTextFieldStock().clear();
         employeeView.getTextFieldUserId().clear();
+        employeeView.getTextFieldQuantity().clear();
     }
 
     private void refreshTableView() {
