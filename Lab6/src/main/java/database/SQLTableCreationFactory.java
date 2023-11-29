@@ -77,6 +77,7 @@ public class SQLTableCreationFactory {
                     "  publishedDate DATETIME DEFAULT NULL," +
                     "  user_id INT NOT NULL," +
                     "  quantity INT NOT NULL," +
+                    "  employee_id INT NULL," +
                     "  PRIMARY KEY (id)," +
                     "  UNIQUE KEY id_UNIQUE (id)," +
                     "  CONSTRAINT user_fkid_order" +

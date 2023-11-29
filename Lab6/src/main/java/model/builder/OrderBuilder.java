@@ -34,13 +34,19 @@ public class OrderBuilder {
 
     public OrderBuilder setUserId(Long userId)
     {
-        order.setUser_id(userId);
+        order.setUserId(userId);
         return this;
     }
 
     public OrderBuilder setQuantity(int quantity)
     {
         order.setQuantity(quantity);
+        return this;
+    }
+
+    public OrderBuilder setEmployeeId(Long employeeId)
+    {
+        order.setEmployeeId(employeeId);
         return this;
     }
     public Order build(){return order;}

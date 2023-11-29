@@ -1,18 +1,14 @@
 package repository.user;
+
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 import static database.Constants.Tables.USER;
-import static java.util.Collections.singletonList;
 
 public class UserRepositoryMySQL implements UserRepository {
 
@@ -87,7 +83,7 @@ public class UserRepositoryMySQL implements UserRepository {
                 long userId = rs.getLong(1);
                 if(userId == 0)
                 {
-                    saveNotification.addError("Eroare la obtinerea id-ului");
+                    saveNotification.addError("Error when retrieving the id!");
                     saveNotification.setResult(Boolean.FALSE);
                 }
                 user.setId(userId);

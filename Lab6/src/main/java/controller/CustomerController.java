@@ -14,14 +14,14 @@ import java.util.List;
 
 public class CustomerController {
     private final CustomerView customerView;
-    private final Long user_id;
+    private final Long userId;
     private final OrderService orderService;
     private final BookService bookService;
 
-    public CustomerController(CustomerView customerView, Long user_id, OrderService orderService, BookService bookService){
+    public CustomerController(CustomerView customerView, Long userId, OrderService orderService, BookService bookService){
         this.customerView = customerView;
         this.customerView.addBuyButtonListener(new BuyButtonListener());
-        this.user_id = user_id;
+        this.userId = userId;
         this.orderService = orderService;
         this.bookService = bookService;
     }
@@ -37,7 +37,7 @@ public class CustomerController {
                 if(!bookService.checkStock(quantity, book.getId()))
                 {
                     Alert alert = new Alert(Alert.AlertType.ERROR,
-                            String.format("Cartea cu numele %s nu este in cantitatea dorita",book.getTitle()));
+                            String.format("The book named %s is not available in the desired quantity",book.getTitle()));
                     alert.show();
                     return;
                 }
@@ -45,13 +45,13 @@ public class CustomerController {
                         setAuthor(book.getAuthor())
                         .setTitle(book.getTitle())
                         .setPublishedDate(book.getPublishedDate())
-                        .setUserId(user_id)
+                        .setUserId(userId)
                         .setQuantity(quantity)
                         .build();
                 orderService.save(order);
                 bookService.updateStock(quantity,book.getId());
             }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartea a fost adaugata cu succes!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,"The order has been placed!");
             refreshTableView();
             customerView.getTextField().clear();
             alert.show();
