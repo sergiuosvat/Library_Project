@@ -37,7 +37,7 @@ public class CustomerController {
                 if(!bookService.checkStock(quantity, book.getId()))
                 {
                     Alert alert = new Alert(Alert.AlertType.ERROR,
-                            String.format("Cartea cu numele %s nu este in cantitatea dorita",book.getTitle()));
+                            String.format("The book named %s is not available in the desired quantity",book.getTitle()));
                     alert.show();
                     return;
                 }
@@ -51,7 +51,7 @@ public class CustomerController {
                 orderService.save(order);
                 bookService.updateStock(quantity,book.getId());
             }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Cartea a fost adaugata cu succes!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,"The order has been placed!");
             refreshTableView();
             customerView.getTextField().clear();
             alert.show();

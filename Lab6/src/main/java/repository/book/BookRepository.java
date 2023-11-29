@@ -19,4 +19,6 @@ public interface BookRepository {
     void updateStock(int quantity, Long id);
 
     boolean checkStock(int quantity, Long id);
+
+    void updateBook(Book book, Long id);
 }

@@ -9,7 +9,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -22,18 +25,27 @@ public class EmployeeView {
     private final TextField textFieldTitle = new TextField();
     private final TextField textFieldAuthor = new TextField();
     private final TextField textFieldPublishedDate = new TextField();
-    private final TextField textFieldQuantity = new TextField();
+    private final TextField textFieldStock = new TextField();
     private final TextField textFieldUserId = new TextField();
+    private final TextField textFieldQuantity = new TextField();
+    private final Label title = new Label("Books available now");
+    private final Label bookId = new Label("id");
+    private final Label bookAuthor = new Label("author");
+    private final Label bookTitle = new Label("title");
+    private final Label bookPublishedDate = new Label("date");
+    private final Label bookStock = new Label("stock");
+    private final Label userId = new Label("user id");
+    private final Label bookQuantity = new Label("quantity");
+    private final HBox bottomBox = new HBox(10);
     private final HBox tableBox = new HBox(tableView);
-    private final Button sellButton = new Button("Sell");;
-    private final Button updateButton = new Button("Update");;
+    private final Button sellButton = new Button("Sell");
+    private final Button updateButton = new Button("Update");
     private final Button deleteButton = new Button("Delete");
     private final Button orderToPdfButton = new Button("OrderToPdf");
     private final BookService bookService;
 
 
-    public EmployeeView(Stage primaryStage, BookService bookService)
-    {
+    public EmployeeView(Stage primaryStage, BookService bookService) {
         this.bookService = bookService;
         primaryStage.setTitle("Book Store");
         GridPane gridPane = new GridPane();
@@ -50,40 +62,93 @@ public class EmployeeView {
         initializeTextFieldPublishedDate();
         initializeTextFieldQuantity();
         initializeTextFieldUserId();
+        initializeTextFieldStock();
+        initializeLabels();
+        initializeBottomBox();
 
-        HBox inputHBox = new HBox(10);
-        inputHBox.setAlignment(Pos.BOTTOM_CENTER);
+        HBox titleBox = new HBox(title);
+        titleBox.setAlignment(Pos.CENTER);
 
-        Label title = new Label("Cartile disponibile acum");
-        title.setFont(Font.font(null, FontWeight.BOLD,16));
-        HBox labelBox = new HBox(title);
-        labelBox.setAlignment(Pos.CENTER);
-
-        GridPane gridPaneMain= new GridPane();
+        GridPane gridPaneMain = new GridPane();
         gridPaneMain.setHgap(10);
         gridPaneMain.setVgap(10);
         gridPaneMain.setPadding(new Insets(25, 25, 25, 25));
-
-        inputHBox.getChildren().addAll(textFieldId,textFieldAuthor,textFieldTitle,
-                textFieldPublishedDate,textFieldUserId,textFieldQuantity);
 
         VBox vBox = new VBox(sellButton, updateButton, deleteButton, orderToPdfButton);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
-        gridPane.add(tableBox,0,1);
-        gridPane.add(vBox,1,1);
-        gridPaneMain.add(labelBox,0,1);
-        gridPaneMain.add(gridPane,0,2);
-        gridPaneMain.add(inputHBox,0,3);
+        gridPane.add(tableBox, 0, 1);
+        gridPane.add(vBox, 1, 1);
+        gridPaneMain.add(titleBox, 0, 1);
+        gridPaneMain.add(gridPane, 0, 2);
+        gridPaneMain.add(bottomBox, 0, 3);
 
         Scene scene = new Scene(gridPaneMain, 800, 480);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    private void initializeBottomBox() {
+        VBox vBoxId = new VBox(textFieldId, bookId);
+        vBoxId.setSpacing(10);
+        vBoxId.setAlignment(Pos.CENTER);
 
-    private void initializeGridPane(GridPane gridPane){
+        VBox vBoxAuthor = new VBox(textFieldAuthor, bookAuthor);
+        vBoxAuthor.setSpacing(10);
+        vBoxAuthor.setAlignment(Pos.CENTER);
+
+        VBox vBoxBookTitle = new VBox(textFieldTitle,bookTitle);
+        vBoxBookTitle.setSpacing(10);
+        vBoxBookTitle.setAlignment(Pos.CENTER);
+
+        VBox vBoxPublishedDate = new VBox(textFieldPublishedDate,bookPublishedDate);
+        vBoxPublishedDate.setSpacing(10);
+        vBoxPublishedDate.setAlignment(Pos.CENTER);
+
+        VBox vBoxStock = new VBox(textFieldStock,bookStock);
+        vBoxStock.setSpacing(10);
+        vBoxStock.setAlignment(Pos.CENTER);
+
+        VBox vBoxUserId = new VBox(textFieldUserId,userId);
+        vBoxUserId.setSpacing(10);
+        vBoxUserId.setAlignment(Pos.CENTER);
+
+        VBox vBoxQuantity = new VBox(textFieldQuantity,bookQuantity);
+        vBoxQuantity.setSpacing(10);
+        vBoxQuantity.setAlignment(Pos.CENTER);
+
+        bottomBox.setAlignment(Pos.BOTTOM_CENTER);
+        bottomBox.getChildren().addAll(vBoxId, vBoxAuthor, vBoxBookTitle,
+                vBoxPublishedDate, vBoxStock, vBoxUserId, vBoxQuantity);
+    }
+
+    private void initializeLabels() {
+        title.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+        bookId.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookId.setAlignment(Pos.CENTER);
+
+        bookAuthor.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookAuthor.setAlignment(Pos.CENTER);
+
+        bookTitle.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookTitle.setAlignment(Pos.CENTER);
+
+        bookPublishedDate.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookPublishedDate.setAlignment(Pos.CENTER);
+
+        bookStock.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookStock.setAlignment(Pos.CENTER);
+
+        userId.setFont(Font.font(null, FontWeight.BOLD, 16));
+        userId.setAlignment(Pos.CENTER);
+
+        bookQuantity.setFont(Font.font(null, FontWeight.BOLD, 16));
+        bookQuantity.setAlignment(Pos.CENTER);
+    }
+
+    private void initializeGridPane(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -96,10 +161,9 @@ public class EmployeeView {
         gridPane.getColumnConstraints().addAll(column1, column2);
     }
 
-    private void initializeTable()
-    {
+    private void initializeTable() {
         TableColumn<Book, String> id = new TableColumn<>("id");
-        TableColumn<Book,String> author = new TableColumn<>("author");
+        TableColumn<Book, String> author = new TableColumn<>("author");
         TableColumn<Book, String> title = new TableColumn<>("title");
         TableColumn<Book, String> publishedDate = new TableColumn<>("publishedDate");
         TableColumn<Book, Integer> stock = new TableColumn<>("stock");
@@ -117,7 +181,7 @@ public class EmployeeView {
         stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
 
-        tableView.getColumns().addAll(id,author,title,publishedDate,stock);
+        tableView.getColumns().addAll(id, author, title, publishedDate, stock);
 
         ObservableList<Book> books = FXCollections.observableArrayList();
         books.addAll(bookService.findAll());
@@ -136,72 +200,91 @@ public class EmployeeView {
         tableBox.getChildren().addAll(tableScrollPane);
     }
 
-    private void initializeSellButton()
-    {
+    private void initializeSellButton() {
         sellButton.setFocusTraversable(false);
-        sellButton.setPrefSize(100,50);
+        sellButton.setPrefSize(100, 50);
     }
 
-    private void initializeUpdateButton()
-    {
+    private void initializeUpdateButton() {
         updateButton.setFocusTraversable(false);
-        updateButton.setPrefSize(100,50);
+        updateButton.setPrefSize(100, 50);
     }
 
-    private void initializeDeleteButton()
-    {
+    private void initializeDeleteButton() {
         deleteButton.setFocusTraversable(false);
-        deleteButton.setPrefSize(100,50);
+        deleteButton.setPrefSize(100, 50);
     }
 
-    private void initializeOrderToPdfButton()
-    {
+    private void initializeOrderToPdfButton() {
         orderToPdfButton.setFocusTraversable(false);
-        orderToPdfButton.setPrefSize(100,50);
+        orderToPdfButton.setPrefSize(100, 50);
     }
 
-    private void initializeTextFieldId(){
+    private void initializeTextFieldId() {
         textFieldId.setFocusTraversable(false);
         textFieldId.setPromptText("Id");
         textFieldId.maxWidth(10);
     }
-    private void initializeTextFieldTitle(){
+
+    private void initializeTextFieldTitle() {
         textFieldTitle.setFocusTraversable(false);
         textFieldTitle.setPromptText("Title");
         textFieldTitle.maxWidth(50);
     }
-    private void initializeTextFieldAuthor(){
+
+    private void initializeTextFieldAuthor() {
         textFieldAuthor.setFocusTraversable(false);
         textFieldAuthor.setPromptText("Author");
         textFieldAuthor.maxWidth(50);
     }
-    private void initializeTextFieldPublishedDate(){
+
+    private void initializeTextFieldPublishedDate() {
         textFieldPublishedDate.setFocusTraversable(false);
         textFieldPublishedDate.setPromptText("PublishedDate");
         textFieldPublishedDate.maxWidth(50);
     }
 
-    private void initializeTextFieldQuantity(){
-        textFieldQuantity.setFocusTraversable(false);
-        textFieldQuantity.setPromptText("Quantity");
-        textFieldQuantity.maxWidth(10);
+    private void initializeTextFieldStock() {
+        textFieldStock.setFocusTraversable(false);
+        textFieldStock.setPromptText("Stock");
+        textFieldStock.maxWidth(10);
     }
 
-    private void initializeTextFieldUserId()
-    {
+    private void initializeTextFieldUserId() {
         textFieldUserId.setFocusTraversable(false);
         textFieldUserId.setPromptText("UserId");
         textFieldUserId.maxWidth(10);
     }
 
-    public void addSellButtonListener(EventHandler<ActionEvent> sellButtonListener)
-    {
+    private void initializeTextFieldQuantity() {
+        textFieldQuantity.setFocusTraversable(false);
+        textFieldQuantity.setPromptText("Quantity");
+        textFieldQuantity.maxWidth(10);
+    }
+
+    public void addSellButtonListener(EventHandler<ActionEvent> sellButtonListener) {
         sellButton.setOnAction(sellButtonListener);
     }
 
-    public TableView<Book> getTable() { return tableView;}
+    public void addUpdateButtonListener(EventHandler<ActionEvent> updateButtonListener) {
+        updateButton.setOnAction(updateButtonListener);
+    }
 
-    public TextField getTextFieldQuantity() {return textFieldQuantity;}
+    public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener) {
+        deleteButton.setOnAction(deleteButtonListener);
+    }
+
+    public void addOrderToPdfButtonListener(EventHandler<ActionEvent> orderToPdfButtonListener) {
+        orderToPdfButton.setOnAction(orderToPdfButtonListener);
+    }
+
+    public TableView<Book> getTable() {
+        return tableView;
+    }
+
+    public TextField getTextFieldStock() {
+        return textFieldStock;
+    }
 
     public TextField getTextFieldId() {
         return textFieldId;
@@ -221,5 +304,9 @@ public class EmployeeView {
 
     public TextField getTextFieldPublishedDate() {
         return textFieldPublishedDate;
+    }
+
+    public TextField getTextFieldQuantity() {
+        return textFieldQuantity;
     }
 }

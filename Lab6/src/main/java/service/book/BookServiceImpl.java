@@ -52,4 +52,8 @@ public class BookServiceImpl implements BookService{
     public boolean checkStock(int quantity, Long id) {
         return bookRepository.checkStock(quantity, id);
     }
+
+    public void updateBook(Book book, Long id){
+        bookRepository.updateBook(book, id);
+    }
 }

@@ -87,7 +87,7 @@ public class UserRepositoryMySQL implements UserRepository {
                 long userId = rs.getLong(1);
                 if(userId == 0)
                 {
-                    saveNotification.addError("Eroare la obtinerea id-ului");
+                    saveNotification.addError("Error when retrieving the id!");
                     saveNotification.setResult(Boolean.FALSE);
                 }
                 user.setId(userId);
