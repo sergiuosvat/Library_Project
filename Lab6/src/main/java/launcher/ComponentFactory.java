@@ -17,6 +17,8 @@ import service.order.OrderService;
 import service.order.OrderServiceImpl;
 import service.user.AuthenticationService;
 import service.user.AuthenticationServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 import view.LoginView;
 
 import java.sql.Connection;
@@ -32,6 +34,7 @@ public class ComponentFactory {
     private static ComponentFactory instance;
     private final OrderRepository orderRepository;
     private final OrderService orderService;
+    private final UserService userService;
 
     public static ComponentFactory getInstance(Boolean componentsForTests, Stage stage)
     {
@@ -52,7 +55,10 @@ public class ComponentFactory {
         this.bookService = new BookServiceImpl(bookRepository);
         this.orderRepository = new OrderRepositoryMySQL(connection);
         this.orderService = new OrderServiceImpl(orderRepository);
-        this.loginController = new LoginController(loginView,authenticationService,getBookService(),getOrderService());
+        this.userService = new UserServiceImpl(userRepository);
+        this.loginController = new LoginController(loginView,authenticationService,getBookService(),getOrderService(), getUserService());
+
+
     }
 
     public LoginView getLoginView() {
@@ -65,6 +71,10 @@ public class ComponentFactory {
 
     public AuthenticationService getAuthenticationService() {
         return authenticationService;
+    }
+
+    public UserService getUserService() {
+        return userService;
     }
 
     public UserRepository getUserRepository() {
