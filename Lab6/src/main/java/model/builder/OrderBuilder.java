@@ -34,7 +34,7 @@ public class OrderBuilder {
 
     public OrderBuilder setUserId(Long userId)
     {
-        order.setUser_id(userId);
+        order.setUserId(userId);
         return this;
     }
 
@@ -46,7 +46,7 @@ public class OrderBuilder {
 
     public OrderBuilder setEmployeeId(Long employeeId)
     {
-        order.setEmployee_id(employeeId);
+        order.setEmployeeId(employeeId);
         return this;
     }
     public Order build(){return order;}

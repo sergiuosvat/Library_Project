@@ -21,7 +21,6 @@ import service.book.BookService;
 
 public class EmployeeView {
     private final TableView<Book> tableView = new TableView<>();
-    private final TextField textFieldId = new TextField();
     private final TextField textFieldTitle = new TextField();
     private final TextField textFieldAuthor = new TextField();
     private final TextField textFieldPublishedDate = new TextField();
@@ -29,7 +28,6 @@ public class EmployeeView {
     private final TextField textFieldUserId = new TextField();
     private final TextField textFieldQuantity = new TextField();
     private final Label title = new Label("Books available now");
-    private final Label bookId = new Label("id");
     private final Label bookAuthor = new Label("author");
     private final Label bookTitle = new Label("title");
     private final Label bookPublishedDate = new Label("date");
@@ -42,6 +40,7 @@ public class EmployeeView {
     private final Button updateButton = new Button("Update");
     private final Button deleteButton = new Button("Delete");
     private final Button orderToPdfButton = new Button("OrderToPdf");
+    private final Button createBookButton = new Button("Add");
     private final BookService bookService;
 
 
@@ -52,11 +51,11 @@ public class EmployeeView {
 
         initializeGridPane(gridPane);
         initializeTable();
+        initializeCreateBookButton();
         initializeSellButton();
         initializeDeleteButton();
         initializeOrderToPdfButton();
         initializeUpdateButton();
-        initializeTextFieldId();
         initializeTextFieldTitle();
         initializeTextFieldAuthor();
         initializeTextFieldPublishedDate();
@@ -74,7 +73,7 @@ public class EmployeeView {
         gridPaneMain.setVgap(10);
         gridPaneMain.setPadding(new Insets(25, 25, 25, 25));
 
-        VBox vBox = new VBox(sellButton, updateButton, deleteButton, orderToPdfButton);
+        VBox vBox = new VBox(createBookButton,sellButton, updateButton, deleteButton, orderToPdfButton);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
@@ -90,9 +89,6 @@ public class EmployeeView {
     }
 
     private void initializeBottomBox() {
-        VBox vBoxId = new VBox(textFieldId, bookId);
-        vBoxId.setSpacing(10);
-        vBoxId.setAlignment(Pos.CENTER);
 
         VBox vBoxAuthor = new VBox(textFieldAuthor, bookAuthor);
         vBoxAuthor.setSpacing(10);
@@ -119,15 +115,12 @@ public class EmployeeView {
         vBoxQuantity.setAlignment(Pos.CENTER);
 
         bottomBox.setAlignment(Pos.BOTTOM_CENTER);
-        bottomBox.getChildren().addAll(vBoxId, vBoxAuthor, vBoxBookTitle,
+        bottomBox.getChildren().addAll(vBoxAuthor, vBoxBookTitle,
                 vBoxPublishedDate, vBoxStock, vBoxUserId, vBoxQuantity);
     }
 
     private void initializeLabels() {
         title.setFont(Font.font(null, FontWeight.BOLD, 16));
-
-        bookId.setFont(Font.font(null, FontWeight.BOLD, 16));
-        bookId.setAlignment(Pos.CENTER);
 
         bookAuthor.setFont(Font.font(null, FontWeight.BOLD, 16));
         bookAuthor.setAlignment(Pos.CENTER);
@@ -220,10 +213,9 @@ public class EmployeeView {
         orderToPdfButton.setPrefSize(100, 50);
     }
 
-    private void initializeTextFieldId() {
-        textFieldId.setFocusTraversable(false);
-        textFieldId.setPromptText("Id");
-        textFieldId.maxWidth(10);
+    private void initializeCreateBookButton() {
+        createBookButton.setFocusTraversable(false);
+        createBookButton.setPrefSize(100, 50);
     }
 
     private void initializeTextFieldTitle() {
@@ -278,16 +270,16 @@ public class EmployeeView {
         orderToPdfButton.setOnAction(orderToPdfButtonListener);
     }
 
+    public void addCreateBookButtonListener(EventHandler<ActionEvent> createBookButtonListener) {
+        createBookButton.setOnAction(createBookButtonListener);
+    }
+
     public TableView<Book> getTable() {
         return tableView;
     }
 
     public TextField getTextFieldStock() {
         return textFieldStock;
-    }
-
-    public TextField getTextFieldId() {
-        return textFieldId;
     }
 
     public TextField getTextFieldTitle() {

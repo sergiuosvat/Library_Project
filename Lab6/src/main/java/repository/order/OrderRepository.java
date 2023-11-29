@@ -2,7 +2,11 @@ package repository.order;
 
 import model.Order;
 
+import java.util.List;
+
 public interface OrderRepository {
 
-    public boolean save(Order order);
+    boolean save(Order order);
+
+    List<Order> findAll();
 }

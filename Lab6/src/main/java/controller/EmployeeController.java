@@ -1,5 +1,11 @@
 package controller;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -10,6 +16,7 @@ import service.book.BookService;
 import service.order.OrderService;
 import view.EmployeeView;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,15 +35,14 @@ public class EmployeeController {
         this.employeeView.addSellButtonListener(new EmployeeController.SellButtonListener());
         this.employeeView.addDeleteButtonListener(new EmployeeController.DeleteButtonListener());
         this.employeeView.addUpdateButtonListener(new EmployeeController.UpdateButtonListener());
+        this.employeeView.addCreateBookButtonListener(new EmployeeController.CreateBookButtonListener());
+        this.employeeView.addOrderToPdfButtonListener(new EmployeeController.OrderToPdfButtonListener());
         this.orderService = orderService;
         this.bookService = bookService;
         onChangeTextArea();
     }
 
     private void onChangeTextArea() {
-        employeeView.getTextFieldId().textProperty().addListener((obs, oldText, newText) -> {
-            if (!Objects.equals(newText, "")) book.setId(Long.parseLong(newText));
-        });
 
         employeeView.getTextFieldAuthor().textProperty().addListener((obs, oldText, newText) -> {
             if (!Objects.equals(newText, "")) book.setAuthor(newText);
@@ -48,9 +54,13 @@ public class EmployeeController {
 
         employeeView.getTextFieldPublishedDate().textProperty().addListener((obs, oldText, newText) -> {
             if (!Objects.equals(newText, "")) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate localDate = LocalDate.parse(newText, formatter);
-                book.setPublishedDate(localDate);
+                String dateFormatRegex = "\\d{4}-\\d{2}-\\d{2}";
+                if (newText.matches(dateFormatRegex))
+                {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate localDate = LocalDate.parse(newText, formatter);
+                    book.setPublishedDate(localDate);
+                }
             }
         });
 
@@ -59,7 +69,6 @@ public class EmployeeController {
         });
         employeeView.getTable().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                employeeView.getTextFieldId().setText(String.valueOf(newSelection.getId()));
                 employeeView.getTextFieldTitle().setText(newSelection.getTitle());
                 employeeView.getTextFieldAuthor().setText(newSelection.getAuthor());
                 employeeView.getTextFieldPublishedDate().setText(newSelection.getPublishedDate().toString());
@@ -75,7 +84,6 @@ public class EmployeeController {
     }
 
     private void clearTextAreas() {
-        employeeView.getTextFieldId().clear();
         employeeView.getTextFieldAuthor().clear();
         employeeView.getTextFieldTitle().clear();
         employeeView.getTextFieldPublishedDate().clear();
@@ -155,6 +163,65 @@ public class EmployeeController {
             refreshTableView();
             clearTextAreas();
             alert.show();
+        }
+    }
+
+    private class CreateBookButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            bookService.save(book);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The book was added successfully!");
+            refreshTableView();
+            clearTextAreas();
+            alert.show();
+        }
+    }
+
+    private class OrderToPdfButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            List<Order> orders = orderService.findAll();
+
+            try {
+                String dest = "Sales.pdf";
+                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+                Document document = new Document(pdfDoc);
+                Table table = new Table(7);
+                addTableHeaders(table);
+                for (Order order : orders)
+                {
+                    addTableRows(table,order);
+                }
+
+                document.add(table);
+                document.close();
+                pdfDoc.close();
+
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private void addTableHeaders(Table table)
+        {
+            table.addHeaderCell("id");
+            table.addHeaderCell("author");
+            table.addHeaderCell("title");
+            table.addHeaderCell("publishedDate");
+            table.addHeaderCell("user-id");
+            table.addHeaderCell("quantity");
+            table.addHeaderCell("employee-id");
+        }
+
+        private void addTableRows(Table table, Order order)
+        {
+            table.addCell(new Cell().add(new Paragraph(order.getId().toString())));
+            table.addCell(new Cell().add(new Paragraph(order.getAuthor())));
+            table.addCell(new Cell().add(new Paragraph(order.getTitle())));
+            table.addCell(new Cell().add(new Paragraph(order.getPublishedDate().toString())));
+            table.addCell(new Cell().add(new Paragraph(order.getUserId().toString())));
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(order.getQuantity()))));
+            table.addCell(new Cell().add(new Paragraph(order.getEmployeeId().toString())));
         }
     }
 
