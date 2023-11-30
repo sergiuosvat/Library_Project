@@ -19,21 +19,24 @@ import javafx.stage.Stage;
 import model.User;
 import service.user.UserService;
 
+import static database.Constants.Roles.*;
+
 public class AdminView {
     private final TableView<User> tableView = new TableView<>();
-    private final TextField textField = new TextField();
     private final UserService userService;
     private final Label title = new Label("Available users");
     private final TextField textFieldUsername = new TextField();
     private final TextField textFieldPassword = new TextField();
     private final Label usernameLabel = new Label("username");
     private final Label passwordLabel = new Label("password");
+    private final Label roleLabel = new Label("role");
     private final HBox tableBox = new HBox(tableView);
     private final HBox bottomBox = new HBox(10);
     private final Button createUserButton = new Button("Create");
     private final Button updateButton = new Button("Update");
     private final Button deleteButton = new Button("Delete");
     private final Button employeeSalesToPdfButton = new Button("EmployeeSales");
+    private final ComboBox<String> comboBox = new ComboBox<>();
 
     public AdminView(Stage primaryStage, UserService userService)
     {
@@ -90,6 +93,14 @@ public class AdminView {
 
     private void initializeBottomBox() {
 
+
+        comboBox.getItems().addAll(ADMINISTRATOR,EMPLOYEE,CUSTOMER);
+        comboBox.setFocusTraversable(false);
+
+        VBox vBoxRole = new VBox(comboBox,roleLabel);
+        vBoxRole.setAlignment(Pos.CENTER);
+        vBoxRole.setSpacing(10);
+
         VBox vBoxAuthor = new VBox(textFieldUsername, usernameLabel);
         vBoxAuthor.setSpacing(10);
         vBoxAuthor.setAlignment(Pos.CENTER);
@@ -99,7 +110,7 @@ public class AdminView {
         vBoxBookTitle.setAlignment(Pos.CENTER);
 
         bottomBox.setAlignment(Pos.BOTTOM_CENTER);
-        bottomBox.getChildren().addAll(vBoxAuthor, vBoxBookTitle);
+        bottomBox.getChildren().addAll(vBoxAuthor, vBoxBookTitle,vBoxRole);
     }
 
     private void initializeLabels()
@@ -111,6 +122,9 @@ public class AdminView {
 
         passwordLabel.setFont(Font.font(null, FontWeight.BOLD, 16));
         passwordLabel.setAlignment(Pos.CENTER);
+
+        roleLabel.setFont(Font.font(null, FontWeight.BOLD, 16));
+        roleLabel.setAlignment(Pos.CENTER);
     }
 
     private void initializeTable()
@@ -200,7 +214,6 @@ public class AdminView {
 
     public TableView<User> getTable() { return tableView;}
 
-    public TextField getTextField() {return textField;}
 
     public TextField getTextFieldUsername() {
         return textFieldUsername;
@@ -209,4 +222,8 @@ public class AdminView {
     public TextField getTextFieldPassword() {
         return textFieldPassword;
     }
+    public ComboBox<String> getComboBox() {
+        return comboBox;
+    }
+
 }

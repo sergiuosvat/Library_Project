@@ -5,8 +5,10 @@ import javafx.event.EventHandler;
 import model.Role;
 import model.User;
 import model.validator.Notification;
+import repository.security.RightsRolesRepository;
 import service.book.BookService;
 import service.order.OrderService;
+import service.security.RightsRolesService;
 import service.user.AuthenticationService;
 import service.user.UserService;
 import view.AdminView;
@@ -23,14 +25,16 @@ public class LoginController {
     private final BookService bookService;
     private final OrderService orderService;
     private final UserService userService;
+    private final RightsRolesService rightsRolesService;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService, OrderService orderService, UserService userService) {
+    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService, OrderService orderService, UserService userService, RightsRolesService rightsRolesService) {
         this.loginView = loginView;
         this.bookService = bookService;
         this.authenticationService = authenticationService;
         this.orderService = orderService;
         this.userService = userService;
+        this.rightsRolesService = rightsRolesService;
 
         this.loginView.addLoginButtonListener(new LoginButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
@@ -51,7 +55,7 @@ public class LoginController {
                 switch (role.getRole()) {
                     case ADMINISTRATOR:
                         AdminView adminView = new AdminView(loginView.getStage(), userService);
-                        new AdminController(adminView,userService,orderService);
+                        new AdminController(adminView,userService,orderService, authenticationService, rightsRolesService);
                         break;
                     case CUSTOMER:
                         CustomerView customerView = new CustomerView(loginView.getStage(), bookService);

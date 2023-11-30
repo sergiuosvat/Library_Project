@@ -12,10 +12,13 @@ import javafx.scene.control.Alert;
 import model.Order;
 import model.User;
 import service.order.OrderService;
+import service.security.RightsRolesService;
+import service.user.AuthenticationService;
 import service.user.UserService;
 import view.AdminView;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,11 +27,15 @@ public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
     private final User user = new User();
+    private final AuthenticationService authenticationService;
+    private final RightsRolesService rightsRolesService;
 
-    public AdminController(AdminView adminView, UserService userService, OrderService orderService){
+    public AdminController(AdminView adminView, UserService userService, OrderService orderService, AuthenticationService authenticationService, RightsRolesService rightsRolesService){
         this.adminView = adminView;
         this.userService = userService;
         this.orderService = orderService;
+        this.authenticationService = authenticationService;
+        this.rightsRolesService = rightsRolesService;
 
         this.adminView.addDeleteButtonListener(new AdminController.DeleteButtonListener());
         this.adminView.addCreateUserButtonListener(new AdminController.CreateUserButtonListener());
@@ -44,7 +51,13 @@ public class AdminController {
         });
 
         adminView.getTextFieldPassword().textProperty().addListener((obs, oldText, newText) -> {
-            if (!Objects.equals(newText, "")) user.setPassword(newText);
+            if (!Objects.equals(newText, "")) user.setPassword(authenticationService.hashPassword(newText));
+        });
+
+        adminView.getComboBox().valueProperty().addListener((obs, oldSel, newSel) -> {
+            if(!Objects.equals(newSel, "")){
+                user.setRoles(Collections.singletonList(rightsRolesService.findRoleByTitle(newSel)));
+            }
         });
 
 
@@ -52,9 +65,11 @@ public class AdminController {
             if (newSelection != null) {
                 adminView.getTextFieldUsername().setText(newSelection.getUsername());
                 adminView.getTextFieldPassword().setText(newSelection.getPassword());
+                adminView.getComboBox().setValue(rightsRolesService.findRoleForUserString(newSelection.getId()));
 
                 user.setUsername(newSelection.getUsername());
                 user.setPassword(newSelection.getPassword());
+                user.setRoles(Collections.singletonList(rightsRolesService.findRoleByTitle(adminView.getComboBox().getValue())));
             }
         });
     }

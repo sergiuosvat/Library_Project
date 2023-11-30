@@ -15,6 +15,8 @@ import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.order.OrderService;
 import service.order.OrderServiceImpl;
+import service.security.RightsRolesService;
+import service.security.RightsRolesServiceImpl;
 import service.user.AuthenticationService;
 import service.user.AuthenticationServiceImpl;
 import service.user.UserService;
@@ -35,6 +37,7 @@ public class ComponentFactory {
     private final OrderRepository orderRepository;
     private final OrderService orderService;
     private final UserService userService;
+    private final RightsRolesService rightsRolesService;
 
     public static ComponentFactory getInstance(Boolean componentsForTests, Stage stage)
     {
@@ -56,9 +59,8 @@ public class ComponentFactory {
         this.orderRepository = new OrderRepositoryMySQL(connection);
         this.orderService = new OrderServiceImpl(orderRepository);
         this.userService = new UserServiceImpl(userRepository);
-        this.loginController = new LoginController(loginView,authenticationService,getBookService(),getOrderService(), getUserService());
-
-
+        this.rightsRolesService = new RightsRolesServiceImpl(rightsRolesRepository);
+        this.loginController = new LoginController(loginView,authenticationService,bookService,orderService, userService,rightsRolesService);
     }
 
     public LoginView getLoginView() {
@@ -103,5 +105,9 @@ public class ComponentFactory {
 
     public OrderService getOrderService() {
         return orderService;
+    }
+
+    public RightsRolesService getRightsRolesService() {
+        return rightsRolesService;
     }
 }

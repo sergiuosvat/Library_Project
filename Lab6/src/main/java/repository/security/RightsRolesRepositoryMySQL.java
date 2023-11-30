@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static database.Constants.Roles.*;
 import static database.Constants.Tables.*;
 
 public class RightsRolesRepositoryMySQL implements RightsRolesRepository {
@@ -143,5 +144,27 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public String findRoleForUserString(Long userId)
+    {
+        try {
+            PreparedStatement preparedStatement = connection.
+                    prepareStatement("Select * from " + USER_ROLE + " where `user_id`= ?");
+            preparedStatement.setLong(1,userId);
+            ResultSet userRoleResultSet = preparedStatement.executeQuery();
+            if (userRoleResultSet.next()) {
+                long roleId = userRoleResultSet.getLong("role_id");
+                return switch ((int) roleId) {
+                    case 1 -> ADMINISTRATOR;
+                    case 2 -> EMPLOYEE;
+                    case 3 -> CUSTOMER;
+                    default -> "";
+                };
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
