@@ -35,6 +35,27 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
         return orders;
     }
+
+    public List<Order> findAllEmployee()
+    {
+        String sql = "SELECT * FROM orders where employee_id != 0;";
+
+        List<Order> orders = new ArrayList<>();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                orders.add(getOrderFromResultSet(resultSet));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
     public boolean save(Order order) {
         int rowsInserted;
         try{

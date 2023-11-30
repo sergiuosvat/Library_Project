@@ -120,7 +120,7 @@ public class AdminController {
     private class OrderToPdfButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            List<Order> orders = orderService.findAll();
+            List<Order> orders = orderService.findAllEmployee();
 
             try {
                 String dest = "SalesEmployee.pdf";

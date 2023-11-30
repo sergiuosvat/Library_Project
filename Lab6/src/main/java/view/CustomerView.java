@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import model.Book;
 import service.book.BookService;
@@ -32,13 +34,16 @@ public class CustomerView {
         initializeTable();
         initializeBuyButton();
         initializeTextField();
+        Label title = new Label("Books available now");
+        title.setFont(Font.font(null, FontWeight.BOLD, 16));
 
         HBox inputHBox = new HBox(10);
         inputHBox.setAlignment(Pos.BOTTOM_CENTER);
         inputHBox.getChildren().addAll(textField, buyButton);
 
-        gridPane.add(inputHBox, 0, 2);
-        gridPane.add(tableView,0,1);
+        gridPane.add(title,0,1);
+        gridPane.add(tableView,0,2);
+        gridPane.add(inputHBox, 0, 3);
 
         Scene scene = new Scene(gridPane, 720, 480);
         primaryStage.setScene(scene);
