@@ -7,4 +7,6 @@ import java.util.List;
 public interface OrderService {
     boolean save(Order order);
     List<Order> findAll();
+    List<Order> findAllEmployee();
+
 }

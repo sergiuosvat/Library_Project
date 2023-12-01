@@ -1,4 +1,4 @@
-package repository.security;
+package service.security;
 
 import model.Right;
 import model.Role;
@@ -6,7 +6,7 @@ import model.User;
 
 import java.util.List;
 
-public interface RightsRolesRepository {
+public interface RightsRolesService {
     void addRole(String role);
 
     void addRight(String right);
@@ -22,6 +22,5 @@ public interface RightsRolesRepository {
     List<Role> findRolesForUser(Long userId);
 
     void addRoleRight(Long roleId, Long rightId);
-
     String findRoleForUserString(Long userId);
 }

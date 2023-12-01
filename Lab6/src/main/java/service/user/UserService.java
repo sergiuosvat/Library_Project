@@ -1,22 +1,17 @@
-package repository.user;
+package service.user;
 
-import model.Book;
 import model.User;
 import model.validator.Notification;
 
-import java.util.*;
+import java.util.List;
 
-public interface UserRepository {
-
+public interface UserService {
     List<User> findAll();
 
     Notification<User> findByUsernameAndPassword(String username, String password);
 
     Notification<Boolean> save(User user);
 
-    void removeAll();
-
-    boolean existsByUsername(String username);
     void removeById(Long id);
 
     void updateUser(User user);

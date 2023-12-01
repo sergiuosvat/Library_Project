@@ -1,11 +1,13 @@
 package repository.user;
 
+import model.Book;
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static database.Constants.Tables.USER;
@@ -23,7 +25,19 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return null;
+        String sql = "Select * from " + USER;
+        List<User> users = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                users.add(getUserFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
     }
 
     @Override
@@ -55,7 +69,6 @@ public class UserRepositoryMySQL implements UserRepository {
 
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
             findByUsernameAndPasswordNotification.addError("Something is wrong with the Database!");
         }
         return findByUsernameAndPasswordNotification;
@@ -98,12 +111,36 @@ public class UserRepositoryMySQL implements UserRepository {
         return saveNotification;
     }
 
+    public void updateUser(User user) {
+
+        String sql = "UPDATE user SET username = ?, password = ? WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3,user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void removeAll() {
         try {
             Statement statement = connection.createStatement();
             String sql = "DELETE from user where id >= 0";
             statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeById(Long id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE from user where id = ?");
+            preparedStatement.setLong(1,id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -125,6 +162,14 @@ public class UserRepositoryMySQL implements UserRepository {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+        return new UserBuilder()
+                .setId(resultSet.getLong("id"))
+                .setUsername(resultSet.getString("username"))
+                .setPassword(resultSet.getString("password"))
+                .build();
     }
 
 }
