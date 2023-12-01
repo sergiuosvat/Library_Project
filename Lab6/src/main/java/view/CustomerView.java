@@ -37,9 +37,12 @@ public class CustomerView {
         Label title = new Label("Books available now");
         title.setFont(Font.font(null, FontWeight.BOLD, 16));
 
+        Label quantityLabel = new Label("Quantity:");
+        quantityLabel.setFont(Font.font(null,FontWeight.BOLD,16));
+
         HBox inputHBox = new HBox(10);
         inputHBox.setAlignment(Pos.BOTTOM_CENTER);
-        inputHBox.getChildren().addAll(textField, buyButton);
+        inputHBox.getChildren().addAll(quantityLabel,textField, buyButton);
 
         gridPane.add(title,0,1);
         gridPane.add(tableView,0,2);

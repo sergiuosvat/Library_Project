@@ -160,7 +160,7 @@ public class Bootstrap {
     private static void populateTables(Connection connection) throws SQLException {
         SQLTablePopulationFactory sqlTablePopulationFactory = new SQLTablePopulationFactory();
 
-        String populateTableSQL = sqlTablePopulationFactory.getPopulateSQLForTable("book");
+        String populateTableSQL = sqlTablePopulationFactory.getPopulateSQLForTableBook();
 
         Statement statement = connection.createStatement();
         statement.execute(populateTableSQL);

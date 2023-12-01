@@ -65,7 +65,6 @@ public class AdminController {
         adminView.getTable().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 adminView.getTextFieldUsername().setText(newSelection.getUsername());
-                adminView.getTextFieldPassword().setText(newSelection.getPassword());
                 adminView.getComboBox().setValue(rightsRolesService.findRoleForUserString(newSelection.getId()));
 
                 user.setId(newSelection.getId());

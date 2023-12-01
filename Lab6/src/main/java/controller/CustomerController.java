@@ -34,7 +34,7 @@ public class CustomerController {
             int quantity = Integer.parseInt(customerView.getTextField().getText());
             for(Book book : cart)
             {
-                if(!bookService.checkStock(quantity, book.getId()))
+                if(bookService.checkStock(quantity, book.getId()))
                 {
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             String.format("The book named %s is not available in the desired quantity",book.getTitle()));

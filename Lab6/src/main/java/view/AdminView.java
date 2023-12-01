@@ -127,6 +127,7 @@ public class AdminView {
         roleLabel.setAlignment(Pos.CENTER);
     }
 
+
     private void initializeTable()
     {
         TableColumn<User,String> idUser = new TableColumn<>("id");
