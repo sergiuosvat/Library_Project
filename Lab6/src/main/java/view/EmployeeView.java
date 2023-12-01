@@ -41,6 +41,7 @@ public class EmployeeView {
     private final Button deleteButton = new Button("Delete");
     private final Button orderToPdfButton = new Button("OrderToPdf");
     private final Button createBookButton = new Button("Add");
+    private final Button logOutButton = new Button("Log Out");
     private final BookService bookService;
 
 
@@ -64,6 +65,7 @@ public class EmployeeView {
         initializeTextFieldStock();
         initializeLabels();
         initializeBottomBox();
+        initializeLogOutButton();
 
         HBox titleBox = new HBox(title);
         titleBox.setAlignment(Pos.CENTER);
@@ -73,7 +75,7 @@ public class EmployeeView {
         gridPaneMain.setVgap(10);
         gridPaneMain.setPadding(new Insets(25, 25, 25, 25));
 
-        VBox vBox = new VBox(createBookButton,sellButton, updateButton, deleteButton, orderToPdfButton);
+        VBox vBox = new VBox(createBookButton,sellButton, updateButton, deleteButton, orderToPdfButton,logOutButton);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
@@ -218,6 +220,12 @@ public class EmployeeView {
         createBookButton.setPrefSize(100, 50);
     }
 
+    private void initializeLogOutButton() {
+        logOutButton.setFocusTraversable(false);
+        logOutButton.setPrefSize(100, 50);
+    }
+
+
     private void initializeTextFieldTitle() {
         textFieldTitle.setFocusTraversable(false);
         textFieldTitle.setPromptText("Title");
@@ -272,6 +280,9 @@ public class EmployeeView {
 
     public void addCreateBookButtonListener(EventHandler<ActionEvent> createBookButtonListener) {
         createBookButton.setOnAction(createBookButtonListener);
+    }
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener) {
+        logOutButton.setOnAction(logOutButtonListener);
     }
 
     public TableView<Book> getTable() {

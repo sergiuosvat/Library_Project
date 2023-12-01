@@ -35,6 +35,7 @@ public class AdminView {
     private final Button createUserButton = new Button("Create");
     private final Button updateButton = new Button("Update");
     private final Button deleteButton = new Button("Delete");
+    private final Button logOutButton = new Button("Log Out");
     private final Button employeeSalesToPdfButton = new Button("EmployeeSales");
     private final ComboBox<String> comboBox = new ComboBox<>();
 
@@ -54,6 +55,7 @@ public class AdminView {
         initializeUpdateButton();
         initializeTextFieldPassword();
         initializeTextFieldUsername();
+        initializeLogOutButton();
 
         HBox titleBox = new HBox(title);
         titleBox.setAlignment(Pos.CENTER);
@@ -63,7 +65,7 @@ public class AdminView {
         gridPaneMain.setVgap(10);
         gridPaneMain.setPadding(new Insets(25, 25, 25, 25));
 
-        VBox vBox = new VBox(createUserButton, updateButton, deleteButton, employeeSalesToPdfButton);
+        VBox vBox = new VBox(createUserButton, updateButton, deleteButton, employeeSalesToPdfButton,logOutButton);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
@@ -183,6 +185,11 @@ public class AdminView {
         employeeSalesToPdfButton.setPrefSize(100, 50);
     }
 
+    private void initializeLogOutButton() {
+        logOutButton.setFocusTraversable(false);
+        logOutButton.setPrefSize(100, 50);
+    }
+
     private void initializeTextFieldUsername() {
         textFieldUsername.setFocusTraversable(false);
         textFieldUsername.setPromptText("Username");
@@ -211,6 +218,10 @@ public class AdminView {
 
     public void addEmployeeSalesToPdfButtonListener(EventHandler<ActionEvent> employeeSalesToPdfButtonListener) {
         employeeSalesToPdfButton.setOnAction(employeeSalesToPdfButtonListener);
+    }
+
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener) {
+        logOutButton.setOnAction(logOutButtonListener);
     }
 
     public TableView<User> getTable() { return tableView;}

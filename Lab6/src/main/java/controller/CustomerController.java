@@ -18,12 +18,15 @@ public class CustomerController {
     private final OrderService orderService;
     private final BookService bookService;
 
+
     public CustomerController(CustomerView customerView, Long userId, OrderService orderService, BookService bookService){
         this.customerView = customerView;
         this.customerView.addBuyButtonListener(new BuyButtonListener());
+        this.customerView.addLogOutButtonListener(new LogOutButtonListener());
         this.userId = userId;
         this.orderService = orderService;
         this.bookService = bookService;
+
     }
 
     private class BuyButtonListener implements EventHandler<ActionEvent>
@@ -61,6 +64,13 @@ public class CustomerController {
             customerView.getTable().getItems().clear();
             List<Book> updatedBooks = bookService.findAll();
             customerView.getTable().getItems().addAll(updatedBooks);
+        }
+    }
+
+    private static class LogOutButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(javafx.event.ActionEvent event) {
+            LogOutController.logOut();
         }
     }
 

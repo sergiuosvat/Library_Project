@@ -1,5 +1,6 @@
 package launcher;
 
+import controller.LogOutController;
 import controller.LoginController;
 import database.DatabaseConnectionFactory;
 import javafx.stage.Stage;
@@ -61,6 +62,12 @@ public class ComponentFactory {
         this.userService = new UserServiceImpl(userRepository);
         this.rightsRolesService = new RightsRolesServiceImpl(rightsRolesRepository);
         this.loginController = new LoginController(loginView,authenticationService,bookService,orderService, userService,rightsRolesService);
+        LogOutController.setBookService(bookService);
+        LogOutController.setOrderService(orderService);
+        LogOutController.setAuthenticationService(authenticationService);
+        LogOutController.setUserService(userService);
+        LogOutController.setStage(stage);
+        LogOutController.setRightsRolesService(rightsRolesService);
     }
 
     public LoginView getLoginView() {
