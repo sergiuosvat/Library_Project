@@ -30,4 +30,9 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
+    @Override
+    public void removeById(Long id) {
+        userRepository.removeById(id);
+    }
+
 }

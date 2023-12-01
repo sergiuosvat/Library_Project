@@ -121,6 +121,16 @@ public class UserRepositoryMySQL implements UserRepository {
         }
     }
 
+    public void removeById(Long id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE from user where id = ?");
+            preparedStatement.setLong(1,id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean existsByUsername(String email) {
         try {

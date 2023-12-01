@@ -55,7 +55,7 @@ public class AdminController {
         });
 
         adminView.getComboBox().valueProperty().addListener((obs, oldSel, newSel) -> {
-            if(!Objects.equals(newSel, "")){
+            if(!Objects.equals(newSel, null)){
                 user.setRoles(Collections.singletonList(rightsRolesService.findRoleByTitle(newSel)));
             }
         });
@@ -67,6 +67,7 @@ public class AdminController {
                 adminView.getTextFieldPassword().setText(newSelection.getPassword());
                 adminView.getComboBox().setValue(rightsRolesService.findRoleForUserString(newSelection.getId()));
 
+                user.setId(newSelection.getId());
                 user.setUsername(newSelection.getUsername());
                 user.setPassword(newSelection.getPassword());
                 user.setRoles(Collections.singletonList(rightsRolesService.findRoleByTitle(adminView.getComboBox().getValue())));
@@ -77,6 +78,7 @@ public class AdminController {
     private void clearTextAreas() {
         adminView.getTextFieldPassword().clear();
         adminView.getTextFieldUsername().clear();
+        adminView.getComboBox().setValue(null);
     }
 
     private void refreshTableView() {
@@ -88,7 +90,7 @@ public class AdminController {
     private class DeleteButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(javafx.event.ActionEvent event) {
-
+            userService.removeById(user.getId());
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "The user was deleted successfully!");
             refreshTableView();
             clearTextAreas();
