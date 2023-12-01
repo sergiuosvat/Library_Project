@@ -23,6 +23,8 @@ public class CustomerView {
     private final TextField textField = new TextField();
     private final BookService bookService;
     private Button buyButton;
+    private final Button logOutButton = new Button("Log Out");
+
 
     public CustomerView(Stage primaryStage, BookService bookService)
     {
@@ -34,6 +36,8 @@ public class CustomerView {
         initializeTable();
         initializeBuyButton();
         initializeTextField();
+        initializeLogOutButton();
+
         Label title = new Label("Books available now");
         title.setFont(Font.font(null, FontWeight.BOLD, 16));
 
@@ -42,7 +46,7 @@ public class CustomerView {
 
         HBox inputHBox = new HBox(10);
         inputHBox.setAlignment(Pos.BOTTOM_CENTER);
-        inputHBox.getChildren().addAll(quantityLabel,textField, buyButton);
+        inputHBox.getChildren().addAll(quantityLabel,textField, buyButton,logOutButton);
 
         gridPane.add(title,0,1);
         gridPane.add(tableView,0,2);
@@ -92,6 +96,11 @@ public class CustomerView {
         buyButton.setFocusTraversable(false);
     }
 
+    private void initializeLogOutButton() {
+        logOutButton.setFocusTraversable(false);
+        logOutButton.setPrefSize(100, 50);
+    }
+
     private void initializeTextField(){
         textField.setFocusTraversable(false);
     }
@@ -99,6 +108,10 @@ public class CustomerView {
     public void addBuyButtonListener(EventHandler<ActionEvent> buyButtonListener)
     {
         buyButton.setOnAction(buyButtonListener);
+    }
+
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener) {
+        logOutButton.setOnAction(logOutButtonListener);
     }
 
     public TableView<Book> getTable() { return tableView;}

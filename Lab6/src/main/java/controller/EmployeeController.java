@@ -37,6 +37,8 @@ public class EmployeeController {
         this.employeeView.addUpdateButtonListener(new EmployeeController.UpdateButtonListener());
         this.employeeView.addCreateBookButtonListener(new EmployeeController.CreateBookButtonListener());
         this.employeeView.addOrderToPdfButtonListener(new EmployeeController.OrderToPdfButtonListener());
+        this.employeeView.addLogOutButtonListener(new EmployeeController.LogOutButtonListener());
+
         this.orderService = orderService;
         this.bookService = bookService;
         onChangeTextArea();
@@ -226,4 +228,10 @@ public class EmployeeController {
         }
     }
 
+    private static class LogOutButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(javafx.event.ActionEvent event) {
+            LogOutController.logOut();
+        }
+    }
 }

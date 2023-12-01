@@ -42,6 +42,7 @@ public class AdminController {
         this.adminView.addCreateUserButtonListener(new AdminController.CreateUserButtonListener());
         this.adminView.addEmployeeSalesToPdfButtonListener(new AdminController.OrderToPdfButtonListener());
         this.adminView.addUpdateUserButtonListener(new AdminController.UpdateButtonListener());
+        this.adminView.addLogOutButtonListener(new LogOutButtonListener());
         onChangeTextArea();
     }
 
@@ -182,6 +183,13 @@ public class AdminController {
             table.addCell(new Cell().add(new Paragraph(order.getUserId().toString())));
             table.addCell(new Cell().add(new Paragraph(String.valueOf(order.getQuantity()))));
             table.addCell(new Cell().add(new Paragraph(order.getEmployeeId().toString())));
+        }
+    }
+
+    private static class LogOutButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(javafx.event.ActionEvent event) {
+            LogOutController.logOut();
         }
     }
 }
