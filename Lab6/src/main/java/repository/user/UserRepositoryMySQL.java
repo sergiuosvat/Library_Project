@@ -1,5 +1,6 @@
 package repository.user;
 
+import model.Book;
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
@@ -108,6 +109,20 @@ public class UserRepositoryMySQL implements UserRepository {
             saveNotification.addError("Something is wrong with the database!");
         }
         return saveNotification;
+    }
+
+    public void updateUser(User user) {
+
+        String sql = "UPDATE user SET username = ?, password = ? WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3,user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

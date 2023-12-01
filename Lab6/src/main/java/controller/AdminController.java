@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import model.Order;
 import model.User;
+import model.validator.UserValidator;
 import service.order.OrderService;
 import service.security.RightsRolesService;
 import service.user.AuthenticationService;
@@ -51,7 +52,7 @@ public class AdminController {
         });
 
         adminView.getTextFieldPassword().textProperty().addListener((obs, oldText, newText) -> {
-            if (!Objects.equals(newText, "")) user.setPassword(authenticationService.hashPassword(newText));
+            if (!Objects.equals(newText, "")) user.setPassword(newText);
         });
 
         adminView.getComboBox().valueProperty().addListener((obs, oldSel, newSel) -> {
@@ -69,7 +70,6 @@ public class AdminController {
 
                 user.setId(newSelection.getId());
                 user.setUsername(newSelection.getUsername());
-                user.setPassword(newSelection.getPassword());
                 user.setRoles(Collections.singletonList(rightsRolesService.findRoleByTitle(adminView.getComboBox().getValue())));
             }
         });
@@ -79,6 +79,20 @@ public class AdminController {
         adminView.getTextFieldPassword().clear();
         adminView.getTextFieldUsername().clear();
         adminView.getComboBox().setValue(null);
+    }
+
+    private boolean validateInput()
+    {
+        UserValidator userValidator = new UserValidator(user);
+        if(!userValidator.validate()){
+            Alert alert = new Alert(Alert.AlertType.ERROR, userValidator.getFormattedErrors());
+            alert.show();
+            userValidator.getErrors().clear();
+            return false;
+        }
+        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+        userValidator.getErrors().clear();
+        return true;
     }
 
     private void refreshTableView() {
@@ -101,21 +115,26 @@ public class AdminController {
     private class UpdateButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(javafx.event.ActionEvent event) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The user was updated successfully!");
-            refreshTableView();
-            clearTextAreas();
-            alert.show();
+            if(validateInput()){
+                userService.updateUser(user);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The user was updated successfully!");
+                refreshTableView();
+                clearTextAreas();
+                alert.show();
+            }
         }
     }
 
     private class CreateUserButtonListener implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            userService.save(user);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The user was added successfully!");
-            refreshTableView();
-            clearTextAreas();
-            alert.show();
+            if(validateInput()){
+                userService.save(user);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The user was added successfully!");
+                refreshTableView();
+                clearTextAreas();
+                alert.show();
+            }
         }
     }
 

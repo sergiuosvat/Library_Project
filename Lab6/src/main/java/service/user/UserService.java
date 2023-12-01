@@ -13,4 +13,6 @@ public interface UserService {
     Notification<Boolean> save(User user);
 
     void removeById(Long id);
+
+    void updateUser(User user);
 }

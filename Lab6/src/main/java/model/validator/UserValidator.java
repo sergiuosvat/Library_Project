@@ -26,14 +26,14 @@ public class UserValidator {
         return errors.isEmpty();
     }
 
-    private void validateUsername (String username)
+    public void validateUsername (String username)
     {
         if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
             errors.add("Email is not valid!");
         }
     }
 
-    private void validatePassword(String password)
+    public void validatePassword(String password)
     {
         if (password.length()< MIN_PASSWORD_LENGTH){
             errors.add(String.format("Password must be at least %d characters long!", MIN_PASSWORD_LENGTH));
