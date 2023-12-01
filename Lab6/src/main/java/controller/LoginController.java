@@ -2,10 +2,10 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import model.Role;
 import model.User;
 import model.validator.Notification;
-import repository.security.RightsRolesRepository;
 import service.book.BookService;
 import service.order.OrderService;
 import service.security.RightsRolesService;
@@ -28,7 +28,9 @@ public class LoginController {
     private final RightsRolesService rightsRolesService;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService, BookService bookService, OrderService orderService, UserService userService, RightsRolesService rightsRolesService) {
+    public LoginController(LoginView loginView, AuthenticationService authenticationService,
+                           BookService bookService, OrderService orderService, UserService userService,
+                           RightsRolesService rightsRolesService) {
         this.loginView = loginView;
         this.bookService = bookService;
         this.authenticationService = authenticationService;
@@ -49,7 +51,8 @@ public class LoginController {
 
             Notification<User> loginNotification = authenticationService.login(username, password);
             if (loginNotification.hasErrors()) {
-                loginView.setActionTargetText(loginNotification.getFormattedErrors());
+                Alert alert = new Alert(Alert.AlertType.ERROR, loginNotification.getFormattedErrors());
+                alert.show();
             } else {
                 Role role = loginNotification.getResult().getRoles().get(0);
                 switch (role.getRole()) {
@@ -82,9 +85,11 @@ public class LoginController {
             Notification<Boolean> registerNotification = authenticationService.register(username, password);
 
             if (registerNotification.hasErrors()) {
-                loginView.setActionTargetText(registerNotification.getFormattedErrors());
+                Alert alert = new Alert(Alert.AlertType.ERROR, registerNotification.getFormattedErrors());
+                alert.show();
             } else {
-                loginView.setActionTargetText("Register successful!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Registered successfully!");
+                alert.show();
             }
         }
     }

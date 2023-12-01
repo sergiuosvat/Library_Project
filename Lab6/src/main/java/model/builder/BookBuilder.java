@@ -3,11 +3,10 @@ package model.builder;
 import model.Book;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class BookBuilder {
 
-    private Book book;
+    private final Book book;
 
 
     public BookBuilder(){

@@ -4,7 +4,6 @@ import model.User;
 import model.validator.Notification;
 import repository.user.UserRepository;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class UserServiceImpl implements UserService{

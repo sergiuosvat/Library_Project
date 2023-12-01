@@ -12,7 +12,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -22,9 +21,8 @@ public class LoginView {
 
     private TextField userTextField;
     private PasswordField passwordField;
-    private Button signInButton;
+    private Button signUpButton;
     private Button logInButton;
-    private Text actiontarget;
     private final Stage stage;
 
     public LoginView(Stage primaryStage) {
@@ -34,7 +32,7 @@ public class LoginView {
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 720, 480);
+        Scene scene = new Scene(gridPane, 500, 300);
         stage.setScene(scene);
 
         initializeSceneTitle(gridPane);
@@ -53,7 +51,7 @@ public class LoginView {
 
     private void initializeSceneTitle(GridPane gridPane){
         Text sceneTitle = new Text("Welcome to our Book Store");
-        sceneTitle.setFont(Font.font("Tahome", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoe", FontWeight.NORMAL, 20));
         gridPane.add(sceneTitle, 0, 0, 2, 1);
     }
 
@@ -70,11 +68,11 @@ public class LoginView {
         passwordField = new PasswordField();
         gridPane.add(passwordField, 1, 2);
 
-        signInButton = new Button("Sign In");
-        HBox signInButtonHBox = new HBox(10);
-        signInButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        signInButtonHBox.getChildren().add(signInButton);
-        gridPane.add(signInButtonHBox, 1, 4);
+        signUpButton = new Button("Sign Up");
+        HBox signUpButtonHBox = new HBox(10);
+        signUpButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
+        signUpButtonHBox.getChildren().add(signUpButton);
+        gridPane.add(signUpButtonHBox, 1, 4);
 
         logInButton = new Button("Log In");
         HBox logInButtonHBox = new HBox(10);
@@ -82,9 +80,6 @@ public class LoginView {
         logInButtonHBox.getChildren().add(logInButton);
         gridPane.add(logInButtonHBox, 0, 4);
 
-        actiontarget = new Text();
-        actiontarget.setFill(Color.FIREBRICK);
-        gridPane.add(actiontarget, 1, 6);
     }
 
     public String getUsername() {
@@ -97,13 +92,11 @@ public class LoginView {
 
     public Stage getStage(){return stage;}
 
-    public void setActionTargetText(String text){ this.actiontarget.setText(text);}
-
     public void addLoginButtonListener(EventHandler<ActionEvent> loginButtonListener) {
         logInButton.setOnAction(loginButtonListener);
     }
 
     public void addRegisterButtonListener(EventHandler<ActionEvent> signInButtonListener) {
-        signInButton.setOnAction(signInButtonListener);
+        signUpButton.setOnAction(signInButtonListener);
     }
 }

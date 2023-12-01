@@ -5,7 +5,7 @@ import model.Order;
 import java.time.LocalDate;
 
 public class OrderBuilder {
-    private Order order;
+    private final Order order;
 
     public OrderBuilder()
     {

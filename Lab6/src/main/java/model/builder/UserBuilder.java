@@ -5,7 +5,7 @@ import model.User;
 
 public class UserBuilder {
 
-    private User user;
+    private final User user;
 
     public UserBuilder(){
         user = new User();

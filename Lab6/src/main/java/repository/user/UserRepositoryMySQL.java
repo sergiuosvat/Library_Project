@@ -1,6 +1,5 @@
 package repository.user;
 
-import model.Book;
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;

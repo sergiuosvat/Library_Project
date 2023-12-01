@@ -11,7 +11,7 @@ public class Launcher extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.getIcons().add(new Image("utcn-logo.png"));
         ComponentFactory componentFactory = ComponentFactory.getInstance(false,primaryStage);
     }
