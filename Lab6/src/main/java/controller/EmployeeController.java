@@ -67,7 +67,16 @@ public class EmployeeController {
         });
 
         employeeView.getTextFieldStock().textProperty().addListener((obs, oldText, newText) -> {
-            if (!Objects.equals(newText, "")) book.setStock(Integer.parseInt(newText));
+            if (!Objects.equals(newText, ""))
+            {
+                if(newText.contains("-"))
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR,"Stocul nu poate fi negativ!");
+                    alert.show();
+                    return;
+                }
+                book.setStock(Integer.parseInt(newText));
+            }
         });
         employeeView.getTable().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -105,6 +114,13 @@ public class EmployeeController {
         public void handle(javafx.event.ActionEvent event) {
             List<Book> cart = employeeView.getTable().getSelectionModel().getSelectedItems();
             int quantity = Integer.parseInt(employeeView.getTextFieldQuantity().getText());
+            if(quantity < 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Cantitatea nu poate fi negativa!");
+                alert.show();
+                employeeView.getTextFieldQuantity().clear();
+                return;
+            }
             for (Book book : cart) {
                 if (bookService.checkStock(quantity, book.getId())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, String.format("The book named %s is not available in the desired quantity", book.getTitle()));

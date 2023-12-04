@@ -35,6 +35,13 @@ public class CustomerController {
         public void handle(javafx.event.ActionEvent event) {
             List<Book> cart = customerView.getTable().getSelectionModel().getSelectedItems();
             int quantity = Integer.parseInt(customerView.getTextField().getText());
+            if(quantity < 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Cantitatea nu poate fi negativa!");
+                alert.show();
+                customerView.getTextField().clear();
+                return;
+            }
             for(Book book : cart)
             {
                 if(bookService.checkStock(quantity, book.getId()))
