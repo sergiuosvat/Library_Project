@@ -1,1 +1,3 @@
-# AC_IS_Library_Project
+# Library_Project
+
+This is a simple java app that allows users to perform CRUD operations on books.
