@@ -1,3 +1,3 @@
 # Library Project
 
-This is a simple java app that allows users to perform CRUD operations on books.
+This Java application facilitates users in conducting CRUD (Create, Read, Update, Delete) operations on books. It represents my initial project for the Software Engineering course undertaken in the third year of college.
